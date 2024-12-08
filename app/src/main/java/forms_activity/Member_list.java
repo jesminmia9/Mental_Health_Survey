@@ -120,6 +120,8 @@ public class Member_list extends AppCompatActivity {
 
     RelativeLayout secBari;
 
+    static String HHID = "";
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         try
@@ -331,7 +333,7 @@ public class Member_list extends AppCompatActivity {
                     "ON m.HHID = h.HHID " +
                     "WHERE m.HHID LIKE ('" + HHID + "')";*/
 
-            String SQL = "SELECT MemID, DSSID, Name, BDate, Age, MoName, FaName " +
+            String SQL = "SELECT MemID, DSSID, Name, Age, BDate, MoName, FaName " +
                     "FROM Member m " +
                     "INNER JOIN Household h " +
                     "ON m.HHID = h.HHID " ;
@@ -394,19 +396,16 @@ public class Member_list extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-           final Member_DataModel data = dataList.get(position);
+
             Member_DataModel member = dataList.get(position);
-            holder.MemID.setText("MemID: " + member.getName());
-            holder.DSSID.setText("DSSID: " + member.getAge());
-            holder.Name.setText("Name: " + member.getSex());
-            holder.Age.setText("Age: " + member.getSex());
-            holder.BDate.setText("BDate: " + member.getSex());
-            holder.MoName.setText("MoName: " + member.getSex());
-            holder.FaName.setText("FaName: " + member.getSex());
+            holder.MemID.setText("MemID: " + member.getMemID());
+            holder.DSSID.setText("DSSID: " + member.getDSSID());
+            holder.Name.setText("Name: " + member.getName());
+            holder.Age.setText("Age: " + member.getAge());
+            holder.BDate.setText("BDate: " + member.getBDate());
+            holder.MoName.setText("MoName: " + member.getMoName());
+            holder.FaName.setText("FaName: " + member.getFaName());
         }
-
-
-
 
         public int getItemCount() {
             return dataList.size();

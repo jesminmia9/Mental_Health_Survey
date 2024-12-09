@@ -9,146 +9,119 @@
     android:paddingBottom="@dimen/padding_list_row"
     android:paddingTop="0dp">
 
-    <!-- Section for Member Name -->
+    <!-- Section for DSSID -->
     <LinearLayout
-        android:background="#F3F3F3"
-        android:visibility="gone"
         android:id="@+id/secMemberName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#F3F3F3"
         android:orientation="horizontal">
         <TextView
-            android:id="@+id/lblMemberName"
-            android:text="Member Name"
-            android:textStyle="bold"
-            android:textColor="#006699"
+            android:id="@+id/DSSID"
             android:layout_width="match_parent"
-            android:gravity="center"
             android:layout_height="35dp"
-            android:textSize="18sp" />
+            android:gravity="center"
+            android:text="@string/DSSID"
+            android:textColor="#006699"
+            android:textSize="18sp"
+            android:textStyle="bold" />
     </LinearLayout>
 
     <!-- Section for Member Details -->
     <LinearLayout
         android:id="@+id/secMemberDetail"
-        android:layout_below="@+id/secMemberName"
-        android:paddingLeft="5dp"
-        android:paddingRight="?listPreferredItemPaddingRight"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_below="@+id/secMemberName"
+        android:orientation="horizontal"
+        android:paddingLeft="5dp"
+        android:paddingRight="10dp">
 
+        <!-- Member Info in Two Equal Columns -->
+        <GridLayout
+            android:id="@+id/gridMemberDetails"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="2"
+            android:paddingTop="5dp"
+            android:paddingBottom="8dp">
 
-
-        <!-- Left Section: Name
-        <RelativeLayout
-            android:layout_weight="5"
-            android:layout_width="0dp"
-            android:layout_marginLeft="10sp"
-            android:layout_height="wrap_content">-->
-
-            <LinearLayout
-                android:id="@+id/secLeft"
-                android:gravity="left"
-                android:paddingTop="5sp"
-                android:paddingBottom="8sp"
-                android:layout_width="wrap_content"
+            <!-- First Column -->
+            <TextView
+                android:id="@+id/Name"
+                android:text="@string/Name"
+                android:layout_column="0"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-                <TextView
-                    android:id="@+id/MemberID"
-                    android:layout_width="match_parent"
-                    android:gravity="left"
-                    android:layout_height="wrap_content" />
-                <TextView
-                    android:id="@+id/DSSID"
-                    android:layout_width="match_parent"
-                    android:gravity="left"
-                    android:layout_height="wrap_content" />
+                android:layout_columnWeight="1"
+                 />
 
-                <TextView
-                    android:id="@+id/Name"
-                    android:textColor="#006699"
-                    android:layout_width="match_parent"
-                    android:gravity="left"
-                    android:layout_height="wrap_content"
-                     />
+            <TextView
+                android:id="@+id/HHHead"
+                android:text="@string/HHHead"
+                android:layout_column="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                 />
+
+            <TextView
+                android:id="@+id/MoName"
+                android:text="@string/MoName"
+                android:layout_column="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1" />
+
+
+            <TextView
+                android:id="@+id/BDate"
+                android:text="@string/BDate"
+                android:layout_column="0"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1" />
+            <TextView
+                android:id="@+id/FaName"
+                android:text="@string/FaName"
+                android:layout_column="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1" />
+
+
+            <TextView
+                android:id="@+id/MemberAge"
+                android:text="@string/MemberAge"
+                android:layout_column="0"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1" />
+
+            <TextView
+                android:id="@+id/MemberID"
+                android:visibility="gone"
+                android:text="@string/MemberID"
+                android:layout_column="0"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1" />
 
 
 
-                <TextView
-                    android:id="@+id/MemberAge"
-                    android:layout_width="match_parent"
-                    android:gravity="left"
-                    android:layout_height="wrap_content"
-                     />
 
-                <TextView
-                    android:id="@+id/BDate"
-                    android:layout_width="match_parent"
-                    android:gravity="left"
-                    android:layout_height="wrap_content"
-                    />
-                <TextView
-                    android:id="@+id/MoName"
-                    android:layout_width="match_parent"
-                    android:gravity="left"
-                    android:layout_height="wrap_content"
-                    />
-                <TextView
-                    android:id="@+id/FaName"
-                    android:layout_width="match_parent"
-                    android:gravity="left"
-                    android:layout_height="wrap_content"
-                    />
 
-            </LinearLayout>
-        <!-- </RelativeLayout>
 
-        Right Section: Optional Actions -->
+        </GridLayout>
+        <!-- Right Section: Buttons -->
         <LinearLayout
-            android:layout_alignParentRight="true"
-            android:paddingLeft="20dp"
-            android:paddingTop="8sp"
-            android:paddingBottom="8sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <!-- Button to Update Member -->
-            <Button
-                android:id="@+id/btnUpdateMember"
-                android:visibility="gone"
-                android:layout_weight="1"
-                android:textAllCaps="false"
-                android:layout_marginLeft="10sp"
-                android:layout_marginRight="10sp"
-                android:textSize="18sp"
-                android:textColor="@color/theme_color"
-                android:background="@drawable/button_style_circle_line"
-                android:layout_width="wrap_content"
-                android:layout_height="30sp"
-                android:text="Update"
-                android:paddingLeft="5sp"
-                android:paddingRight="5sp" />
-
-            <!-- Button to Visit Member -->
-            <Button
-                android:id="@+id/btnMemberVisit"
-                android:visibility="gone"
-                android:layout_weight="1"
-                android:layout_marginTop="0dp"
-                android:textAllCaps="false"
-                android:layout_marginLeft="10sp"
-                android:layout_marginRight="10sp"
-                android:textSize="18sp"
-                android:textColor="#000000"
-                android:background="@drawable/button_style_circle_line"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="Visit"
-                android:paddingLeft="5sp"
-                android:paddingRight="5sp" />
+            android:orientation="vertical"
+            android:paddingLeft="20dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp">
         </LinearLayout>
+
     </LinearLayout>
 </RelativeLayout>

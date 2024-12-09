@@ -103,7 +103,7 @@ public class Member_list extends AppCompatActivity {
 
     TextView lblHeading;
     Button btnAdd;
-    EditText txtSearch;
+    EditText txtSearchmn;
     EditText dtpFDate;
     EditText dtpTDate;
     Bundle IDbundle;
@@ -153,6 +153,21 @@ public class Member_list extends AppCompatActivity {
                         }});
                     adb.show();
                 }});
+
+            txtSearchmn = (EditText)findViewById(R.id.MNtxtSearch);
+            txtSearchmn.addTextChangedListener(new TextWatcher() {
+
+                public void afterTextChanged(Editable s) {
+                    if(txtSearchmn.getText().toString().length()>0)
+                        DataSearch();
+                }
+
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+                public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            });
+
+
 
 
             IDbundle = getIntent().getExtras();
@@ -285,6 +300,8 @@ public class Member_list extends AppCompatActivity {
             recyclerView.setAdapter(mAdapter);
 
           //  Connection.LocalizeLanguage(Member_list.this, MODULEID, LANGUAGEID);
+           // DataSearch(txtSearch.getText().toString());
+           // DataSearch(txtSearchmn.getText().toString());
             DataSearch();
 
         }
@@ -310,7 +327,7 @@ public class Member_list extends AppCompatActivity {
         if (resultCode == Activity.RESULT_CANCELED) {
             //Write your code if there's no result
         } else {
-            //DataSearch(txtSearch.getText().toString());
+         //  DataSearch();
         }
     }
 
@@ -319,24 +336,17 @@ public class Member_list extends AppCompatActivity {
         try
         {
 
-           // GeoLevel7 = spnLocation.getSelectedItem().toString().split("-")[0];
-         //   VillName = spnVillage.getSelectedItem().toString().split("-")[0];
-         //   CompoundCode = spnCompound.getSelectedItem().toString().split("-")[0];
-         //  HHID = spnHousehold.getSelectedItem().toString().split("-")[0];
-
-         //   BARI = spnHousehold.getSelectedItemPosition()==0 ?"%" : spnBari.getSelectedItem().toString().split("-")[0];
-
-            Member_DataModel d = new Member_DataModel();
-           /* String SQL = "SELECT MemID, DSSID, Name, BDate, Age, MoName, FaName " +
+             Member_DataModel d = new Member_DataModel();
+           String SQL = "SELECT MemID, DSSID, Name, BDate, Age, MoName, FaName " +
                     "FROM Member m " +
                     "INNER JOIN Household h " +
                     "ON m.HHID = h.HHID " +
-                    "WHERE m.HHID LIKE ('" + HHID + "')";*/
+                    "WHERE m.HHID LIKE ('" + HHID + "')";
 
-            String SQL = "SELECT MemID, DSSID, Name, Age, BDate, MoName, FaName " +
+           /*  String SQL = "SELECT MemID, DSSID, Name, Age, BDate, MoName, FaName " +
                     "FROM Member m " +
                     "INNER JOIN Household h " +
-                    "ON m.HHID = h.HHID " ;
+                    "ON m.HHID = h.HHID and Name like('%\"+ txtSearch.getText().toString() +\"%')" ;*/
 
 
             List<Member_DataModel> data = d.SelectAll(this, SQL);

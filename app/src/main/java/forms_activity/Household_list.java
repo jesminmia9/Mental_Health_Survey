@@ -470,13 +470,11 @@ public class Household_list extends AppCompatActivity {
                      " (case when h.totalmember is null or length(ifnull(h.totalmember,''))=0 then 0 else h.totalmember end) totalmember, " +
                      " (case when h.cmwratotal is null or length(ifnull(h.cmwratotal,''))=0 then 0 else h.cmwratotal end) cmwratotal," +
                      " '' indexhh " +
-                     //" ifnull(i.hhno,'')indexhh " +
                      " from Household h\n" +
                      " left outer join (select b.DCode,b.UPCode,b.UNCode,b.cluster,b.VCode,b.Bari,b.BariName,min(h.HHNo)hhno from Bari b inner join Household h on b.DCode=h.DCode and b.UPCode=h.UPCode and b.Cluster=h.Cluster and b.UNCode=h.UNCode and b.VCode=h.VCode and b.Bari=h.Bari\n" +
                      "      where b.DCode='"+ DCODE +"' and b.UPCode='"+ UPCODE +"' and b.UNCode='"+ UNCODE +"' and b.VCode='"+ VCODE +"'\n" +
                      "      group by b.DCode,b.UPCode,b.UNCode,b.VCode,b.Bari,b.BariName)bn on h.dcode=bn.dcode and h.upcode=bn.upcode and h.uncode=bn.uncode and h.cluster=bn.cluster and h.vcode=bn.vcode and h.bari=bn.bari and h.hhno=bn.hhno" +
                      " inner join Bari b on h.DCode=b.DCode and h.UPCode=b.UPCode and h.UNCode=b.UNCode and h.Cluster=b.Cluster and h.VCode=b.VCode and h.Bari=b.Bari\n" +
-                     //" left outer join Index_Household i on h.DCode=i.DCode and h.UPCode=i.UPCode and h.UNCode=i.UNCode and h.Cluster=i.Cluster and h.VCode=i.VCode and h.Bari=i.Bari and h.hhno=i.hhno" +
                      " Where h.DCode='"+ DCODE +"' and h.UPCode='"+ UPCODE +"' and h.UNCode='"+ UNCODE +"' and h.Cluster='"+ CLUSTER +"' and h.VCode='"+ VCODE +"' and h.Bari like('"+ BARI +"') " +
                      " order by h.vcode, h.bari,h.hhno";
              List<Household_DataModel> data = d.SelectAll(this, SQL);

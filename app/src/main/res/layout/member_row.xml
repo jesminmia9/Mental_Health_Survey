@@ -37,91 +37,134 @@
         android:paddingLeft="5dp"
         android:paddingRight="10dp">
 
-        <!-- Member Info in Two Equal Columns -->
+        <!-- Member Info Grid -->
         <GridLayout
             android:id="@+id/gridMemberDetails"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:columnCount="2"
+            android:columnCount="4"
             android:paddingTop="5dp"
             android:paddingBottom="8dp">
 
-            <!-- First Column -->
+            <!-- Row 1 -->
             <TextView
-                android:id="@+id/Name"
-                android:text="@string/Name"
-                android:layout_column="0"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_column="0"
                 android:layout_columnWeight="1"
-                 />
+                android:text="Name    :"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/Name"
+                android:textStyle="normal"
+                android:layout_column="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1" />
+
+            <!-- Row 2 -->
+            <TextView
+                android:id="@+id/labelHHHead"
+                android:text="HHHead :"
+                android:textStyle="bold"
+                android:layout_column="2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1" />
 
             <TextView
                 android:id="@+id/HHHead"
-                android:text="@string/HHHead"
-                android:layout_column="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                 />
-
-            <TextView
-                android:id="@+id/MoName"
-                android:text="@string/MoName"
-                android:layout_column="1"
+                android:textStyle="normal"
+                android:layout_column="3"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1" />
 
+            <!-- Row 3 -->
+            <TextView
+                android:id="@+id/labelMother"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_column="0"
+                android:layout_columnWeight="1"
+                android:text="DOB       :"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/BDate"
-                android:text="@string/BDate"
-                android:layout_column="0"
+                android:textStyle="normal"
+                android:layout_column="1"
+                android:layout_width="0dp"
+                android:maxLength="10"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1" />
+
+            <!-- Row 4 -->
+            <TextView
+                android:text="Mother   :"
+                android:textStyle="bold"
+                android:layout_column="2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1" />
+
             <TextView
-                android:id="@+id/FaName"
-                android:text="@string/FaName"
+                android:id="@+id/MoName"
+                android:textStyle="normal"
+                android:maxLength="10"
+                android:layout_column="3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1" />
+
+            <!-- Row 5 -->
+            <TextView
+                android:id="@+id/labelFather"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_column="0"
+                android:layout_columnWeight="1"
+                android:text="Age        :"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/MemberAge"
+                android:textStyle="normal"
                 android:layout_column="1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1" />
 
-
+            <!-- Row 6 -->
             <TextView
-                android:id="@+id/MemberAge"
-                android:text="@string/MemberAge"
-                android:layout_column="0"
+                android:text="Father    :"
+                android:textStyle="bold"
+                android:layout_column="2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1" />
+
+            <TextView
+                android:id="@+id/FaName"
+                android:textStyle="normal"
+                android:layout_column="3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1" />
+
+            <!-- Row 7 -->
+
 
             <TextView
                 android:id="@+id/MemberID"
                 android:visibility="gone"
-                android:text="@string/MemberID"
-                android:layout_column="0"
+                android:textStyle="normal"
+                android:layout_column="3"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1" />
 
-
-
-
-
-
         </GridLayout>
-        <!-- Right Section: Buttons -->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingLeft="20dp"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp">
-        </LinearLayout>
-
     </LinearLayout>
 </RelativeLayout>

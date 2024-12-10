@@ -54,14 +54,7 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
     <string name="DSSID">DSSID:</string>
-    <string name="Name">Name:</string>
-    <string name="BDate">DOB:</string>
-    <string name="MemberAge">Age:</string>
-    <string name="HHHead">HHead:</string>
-    <string name="MemberID">MemberID:</string>
-    <string name="MoName">Mother:</string>
-    <string name="FaName">Father:</string>
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+     <string name="hello_first_fragment">Hello first fragment</string>
+     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 
-</resources>
+ </resources>

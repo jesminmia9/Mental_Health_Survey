@@ -410,11 +410,12 @@ public class Member_list extends AppCompatActivity {
             Member_DataModel member = dataList.get(position);
             holder.MemID.setText("MemID: " + member.getMemID());
             holder.DSSID.setText("DSSID: " + member.getDSSID());
-            holder.Name.setText("Name: " + member.getName());
-            holder.Age.setText("Age: " + member.getAge());
-            holder.BDate.setText("BDate: " + member.getBDate());
-            holder.MoName.setText("MoName: " + member.getMoName());
-            holder.FaName.setText("FaName: " + member.getFaName());
+          //  holder.Name.setText("Name: " + member.getName());
+            holder.Name.setText(member.getName());
+            holder.Age.setText(member.getAge());
+            holder.BDate.setText(member.getBDate());
+            holder.MoName.setText(member.getMoName());
+            holder.FaName.setText(member.getFaName());
         }
 
         public int getItemCount() {

@@ -119,10 +119,11 @@
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1.1" />
 
-            <!-- Row 5 -->
+            <!-- Row 5
             <TextView
-                android:id="@+id/labelFather"
+                android:id="@+id/labelAge"
                 android:layout_width="0dp"
+
                 android:layout_height="wrap_content"
                 android:layout_column="0"
                 android:layout_columnWeight="0.8"
@@ -135,7 +136,7 @@
                 android:layout_column="1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_columnWeight="1.2" />
+                android:layout_columnWeight="1.2" />-->
 
             <!-- Row 6 -->
             <TextView

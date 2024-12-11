@@ -2,9 +2,6 @@ package forms_activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
-import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,10 +9,7 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.location.Location;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -25,38 +19,29 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import org.icddrb.mental_health_survey.R;
-
-import java.lang.reflect.Member;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-
 import Common.Connection;
 import Common.Global;
 import Utility.MySharedPreferences;
-import forms_datamodel.Household_DataModel;
 import forms_datamodel.Member_DataModel;
 
 
 public class Member_list extends AppCompatActivity {
     boolean networkAvailable=false;
-   // Location currentLocation;
-    double currentLatitude,currentLongitude;
+     double currentLatitude,currentLongitude;
     private String MemID;
     private String DSSID;
     private String Name;
@@ -78,7 +63,7 @@ public class Member_list extends AppCompatActivity {
 
 
     //Disabled Back/Home key
-    //--------------------------------------------------------------------------------------------------
+    //-----------------------
     @Override
     public boolean onKeyDown(int iKeyCode, KeyEvent event)
     {
@@ -86,6 +71,7 @@ public class Member_list extends AppCompatActivity {
         { return false; }
         else { return true;  }
     }
+
     String VariableID;
     private int mDay;
     private int mMonth;
@@ -99,13 +85,7 @@ public class Member_list extends AppCompatActivity {
     private RecyclerView recyclerView;
     private DataAdapter mAdapter;
     static String TableName;
-
-
-    TextView lblHeading;
-    Button btnAdd;
     EditText txtSearchmn;
-    EditText dtpFDate;
-    EditText dtpTDate;
     Bundle IDbundle;
     Spinner spnLocation;
     Spinner spnVillage;
@@ -115,31 +95,27 @@ public class Member_list extends AppCompatActivity {
 
     static String STARTTIME = "";
     static String DEVICEID  = "";
-
     static String ENTRYUSER = "";
-
     RelativeLayout secBari;
-
-    static String HHID = "";
+    static String HHID ;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         try
         {
             setContentView(R.layout.member_list);
-           // getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
             C = new Connection(this);
             g = Global.getInstance();
             STARTTIME = g.CurrentTime24();
 
-          //  DEVICEID = MySharedPreferences.getValue(this, "deviceid");
-          //  ENTRYUSER = MySharedPreferences.getValue(this, "userid");
+            DEVICEID = MySharedPreferences.getValue(this, "deviceid");
+            ENTRYUSER = MySharedPreferences.getValue(this, "userid");
 
 
 
-            TableName = "Member";
-          //  lblHeading = (TextView)findViewById(R.id.lblHeading);
-
+            TableName = "Member_Allinfo";
+            TextView lblHeading = (TextView) findViewById(R.id.lblHeading);
             ImageButton cmdBack = (ImageButton) findViewById(R.id.cmdBack);
             cmdBack.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
@@ -155,20 +131,23 @@ public class Member_list extends AppCompatActivity {
                 }});
 
             txtSearchmn = (EditText)findViewById(R.id.MNtxtSearch);
-            txtSearchmn.addTextChangedListener(new TextWatcher() {
 
-                public void afterTextChanged(Editable s) {
-                    if(txtSearchmn.getText().toString().length()>0)
-                        DataSearch();
-                }
+            /*txtSearchmn.addTextChangedListener(new TextWatcher() {
 
+               public void afterTextChanged(Editable s) {
+                   if(txtSearchmn.getText().toString().length()>0)
+                       DataSearch();
+
+               }
+                @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
-                public void onTextChanged(CharSequence s, int start, int before, int count) {}
-            });
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
 
+                }
 
-
+            });*/
 
             IDbundle = getIntent().getExtras();
             MemID    = IDbundle.getString("MemID");
@@ -195,24 +174,19 @@ public class Member_list extends AppCompatActivity {
             spnHousehold = (Spinner)findViewById(R.id.spnHousehold);
 
 
-            spnLocation.setAdapter(C.getArrayAdapter("SELECT LocID || '-' || GeoLevel7Name FROM Location"));
-            spnVillage.setAdapter(C.getArrayAdapter("Select '' union Select VillID||'-'||VillName from Village where LocID='"+ spnLocation.getSelectedItem().toString().split("-")[0] +"'"));
-            spnCompound.setAdapter(C.getArrayAdapter("Select '' union Select CompoundID||'-'||CompoundName from Compound where VillID='"+ spnVillage.getSelectedItem().toString().split("-")[0] +"'"));
-            spnHousehold.setAdapter(C.getArrayAdapter("Select '' union Select HHID||'-'||HHHead from Household where CompoundID='"+ spnCompound.getSelectedItem().toString().split("-")[0] +"'"));
-
-
-
-
-            // spnLocation.setEnabled(false);
-            // Populate Location Spinner
-            //  spnLocation.setAdapter(C.getArrayAdapter("SELECT GeoLevel1 || '-' || GeoLevel1Name FROM Location"));
-            //spnLocation.setEnabled(false);
-            // spnVillage.setEnabled(spnVillage.getAdapter().getCount() > 1);
+            spnLocation.setAdapter(C.getArrayAdapter("SELECT DISTINCT GeoLevel7 || '-' || GeoLevel7Name FROM Member_Allinfo"));
+            spnVillage.setAdapter(C.getArrayAdapter("SELECT '' UNION SELECT DISTINCT VillID || '-' || VillName FROM Member_Allinfo " +
+                    "WHERE GeoLevel7 = '" + spnLocation.getSelectedItem().toString().split("-")[0] + "'"));
+            spnCompound.setAdapter(C.getArrayAdapter("SELECT '' UNION SELECT DISTINCT CompoundID || '-' || CompoundName FROM Member_Allinfo " +
+                    "WHERE VillID = '" + spnVillage.getSelectedItem().toString().split("-")[0] + "'"));
+            spnHousehold.setAdapter(C.getArrayAdapter("SELECT '' UNION SELECT DISTINCT HHID || '-' || HHHead FROM Member_Allinfo " +
+                    "WHERE CompoundID = '" + spnCompound.getSelectedItem().toString().split("-")[0] + "'"
+            ));
 
 
 
             // Listener to populate Village Spinner
-         spnLocation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+         /*spnLocation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
              @Override
              public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                  String selectedLocation = parent.getSelectedItem().toString().split("-")[0];
@@ -221,10 +195,25 @@ public class Member_list extends AppCompatActivity {
              }
              @Override
              public void onNothingSelected(AdapterView<?> parent) {}
-         });
+         });*/
+
+            spnLocation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    String selectedLocation = spnLocation.getSelectedItem().toString().split("-")[0];
+                    spnVillage.setAdapter(C.getArrayAdapter(
+                            "SELECT '' UNION SELECT DISTINCT VillID || '-' || VillName FROM Member_Allinfo " +
+                                    "WHERE GeoLevel7 = '" + selectedLocation + "'"
+                    ));
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {}
+            });
 
 
-         spnVillage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            /*spnVillage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
              @Override
              public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                  String selectedVillage = parent.getSelectedItem().toString().split("-")[0];
@@ -234,14 +223,28 @@ public class Member_list extends AppCompatActivity {
 
              @Override
              public void onNothingSelected(AdapterView<?> parent) {}
-         });
+         });*/
 
-            spnVillage.setEnabled(spnVillage.getAdapter().getCount() > 1);
+           // spnVillage.setEnabled(spnVillage.getAdapter().getCount() > 1);
+            spnVillage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    String selectedVillage = spnVillage.getSelectedItem().toString().split("-")[0];
+                    spnCompound.setAdapter(C.getArrayAdapter(
+                            "SELECT '' UNION SELECT DISTINCT CompoundID || '-' || CompoundName FROM Member_Allinfo " +
+                                    "WHERE VillID = '" + selectedVillage + "'"
+                    ));
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {}
+            });
+
 
 
 // Listener to populate Household Spinner
 
-         spnCompound.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+         /*spnCompound.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
              @Override
              public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                  String selectedCompound = parent.getSelectedItem().toString().split("-")[0];
@@ -251,18 +254,21 @@ public class Member_list extends AppCompatActivity {
 
              @Override
              public void onNothingSelected(AdapterView<?> parent) {}
-         });
+         });*/
 
+            spnCompound.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    String selectedCompound = spnCompound.getSelectedItem().toString().split("-")[0];
+                    spnHousehold.setAdapter(C.getArrayAdapter(
+                            "SELECT '' UNION SELECT DISTINCT HHID || '-' || HHHead FROM Member_Allinfo " +
+                                    "WHERE CompoundID = '" + selectedCompound + "'"
+                    ));
+                }
 
-         // optional or test purpose
-           /* if (spnVillage.getCount() == 1) {
-                spnVillage.setEnabled(false);
-            } else {
-                spnVillage.setEnabled(true);
-            }*/
-
-
-
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {}
+            });
 
 
             spnHousehold.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -316,7 +322,7 @@ public class Member_list extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
       //  tmpBariNo = "";
-        DataSearch();
+      //  DataSearch();
     }
 
 
@@ -327,7 +333,7 @@ public class Member_list extends AppCompatActivity {
         if (resultCode == Activity.RESULT_CANCELED) {
             //Write your code if there's no result
         } else {
-         //  DataSearch();
+            DataSearch( );
         }
     }
 
@@ -335,18 +341,26 @@ public class Member_list extends AppCompatActivity {
     {
         try
         {
-
-             Member_DataModel d = new Member_DataModel();
-           String SQL = "SELECT MemID, DSSID, Name, BDate, Age, MoName, FaName " +
+            Member_DataModel d = new Member_DataModel();
+            /*String SQL = "SELECT MemID, DSSID, Name, BDate, Age, MoName, FaName " +
                     "FROM Member m " +
                     "INNER JOIN Household h " +
                     "ON m.HHID = h.HHID " +
-                    "WHERE m.HHID LIKE ('" + HHID + "')";
+                    "WHERE m.HHID LIKE ('" + HHID + "')";*/
 
-           /*  String SQL = "SELECT MemID, DSSID, Name, Age, BDate, MoName, FaName " +
+           /*  SELECT MemID, DSSID, Name, BDate, Age, MoName, FaName " +
                     "FROM Member m " +
                     "INNER JOIN Household h " +
-                    "ON m.HHID = h.HHID and Name like('%\"+ txtSearch.getText().toString() +\"%')" ;*/
+                    "ON m.HHID = h.HHID " +
+                    "WHERE m.HHID LIKE ('" + HHID + "')"*/
+           /* String SQL = "SELECT MemID, DSSID, Name,HHHead, BDate, Age, MoName, FaName " +
+                    "FROM Member_Allinfo " +
+                    "WHERE HHID LIKE ('" + HHID + "') and Name like('%"+ txtSearchmn.getText().toString() +"%')";*/
+
+            String SQL = "SELECT MemID, DSSID, Name,HHHead, BDate, Age, MoName, FaName " +
+                    "FROM Member_Allinfo " +
+                    "WHERE HHID LIKE ('" + HHID + "') ";
+
 
 
             List<Member_DataModel> data = d.SelectAll(this, SQL);
@@ -355,7 +369,8 @@ public class Member_list extends AppCompatActivity {
             dataList.addAll(data);
             try {
                 mAdapter.notifyDataSetChanged();
-                lblHeading.setText("খানার তালিকা (মোট খানা: "+ String.valueOf(dataList.size()) +")");
+                // Update heading
+             //    lblHeading.setText("Member List (Total: " + dataList.size() + ")");
             }catch ( Exception ex){
                 Connection.MessageBox(Member_list.this,ex.getMessage());
             }
@@ -376,7 +391,7 @@ public class Member_list extends AppCompatActivity {
 
         public class ViewHolder extends RecyclerView.ViewHolder {
               LinearLayout secMemberDetail;
-              TextView MemID, DSSID, Name,  Age, BDate, MoName, FaName;
+              TextView MemID, DSSID, Name, HHHead, Age, BDate, MoName, FaName;
 
             public ViewHolder(@NonNull View itemView) {
                 super(itemView);
@@ -385,7 +400,8 @@ public class Member_list extends AppCompatActivity {
                 MemID=(TextView)itemView.findViewById(R.id.MemberID);
                 DSSID=(TextView)itemView.findViewById(R.id.DSSID);
                 Name =(TextView)itemView.findViewById(R.id.Name);
-                Age = (TextView)itemView.findViewById(R.id.MemberAge);
+                HHHead =(TextView)itemView.findViewById(R.id.HHHead);
+             //   Age = (TextView)itemView.findViewById(R.id.MemberAge);
                 BDate = (TextView)itemView.findViewById(R.id.BDate);
                 MoName = (TextView)itemView.findViewById(R.id.MoName);
                 FaName = (TextView)itemView.findViewById(R.id.FaName);
@@ -408,11 +424,12 @@ public class Member_list extends AppCompatActivity {
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
             Member_DataModel member = dataList.get(position);
-            holder.MemID.setText("MemID: " + member.getMemID());
+          //  holder.MemID.setText("MemID: " + member.getMemID());
             holder.DSSID.setText("DSSID: " + member.getDSSID());
           //  holder.Name.setText("Name: " + member.getName());
             holder.Name.setText(member.getName());
-            holder.Age.setText(member.getAge());
+            holder.HHHead.setText(member.getHHHead());
+          //  holder.Age.setText(member.getAge());
             holder.BDate.setText(member.getBDate());
             holder.MoName.setText(member.getMoName());
             holder.FaName.setText(member.getFaName());
@@ -533,17 +550,17 @@ public class Member_list extends AppCompatActivity {
     }
 
 
-    protected Dialog onCreateDialog(int id) {
+   /* protected Dialog onCreateDialog(int id) {
         final Calendar c = Calendar.getInstance();
         switch (id) {
             case DATE_DIALOG:
                 return new DatePickerDialog(this, mDateSetListener,g.mYear,g.mMonth-1,g.mDay);
         }
         return null;
-    }
+    }*/
 
 
-    private DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
+    /*private DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
             mYear = year; mMonth = monthOfYear+1; mDay = dayOfMonth;
             EditText dtpDate;
@@ -561,7 +578,7 @@ public class Member_list extends AppCompatActivity {
                     .append(Global.Right("00"+mMonth,2)).append("/")
                     .append(mYear));
         }
-    };
+    };*/
 
 
 }

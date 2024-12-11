@@ -62,6 +62,13 @@ public class Member_DataModel{
         public void setName(String newValue){
               _Name = newValue;
          }
+    private String _HHHead;
+    public String getHHHead(){
+        return _HHHead;
+    }
+    public void setHHHead(String newValue){
+        _HHHead = newValue;
+    }
         private String _Sex = "";
         public String getSex(){
               return _Sex;
@@ -475,7 +482,7 @@ public class Member_DataModel{
         private int _Upload = 2;
         private String _modifyDate = Global.DateTimeNowYMDHMS();
 
-        String TableName = "Member";
+        String TableName = "Member_Allinfo";
 
         public String SaveUpdateData(Context context)
         {
@@ -693,6 +700,7 @@ public class Member_DataModel{
                 d._Rth = cur.getString(cur.getColumnIndex("Rth"));
                 d._RthOth = cur.getString(cur.getColumnIndex("RthOth"));
                 d._Name = cur.getString(cur.getColumnIndex("Name"));
+                d._HHHead = cur.getString(cur.getColumnIndex("HHHead"));
                 d._Sex = cur.getString(cur.getColumnIndex("Sex"));
                 d._BDate_D = cur.getString(cur.getColumnIndex("BDate_D"));
                 d._BDate_M = cur.getString(cur.getColumnIndex("BDate_M"));
@@ -756,99 +764,6 @@ public class Member_DataModel{
             cur.close();
           return data;
         }
-
-        /*@SuppressLint("Range")
-        public List<Member_DataModel> SelectAll(Context context, String SQL) {
-            Connection C = new Connection(context);
-            List<Member_DataModel> data = new ArrayList<>();
-            Cursor cur = C.ReadData(SQL);
-
-            // Handle empty or null cursor
-            if (cur == null || cur.getCount() == 0) {
-                Toast.makeText(context, "No data found", Toast.LENGTH_SHORT).show();
-                return new ArrayList<>();
-            }
-
-            if (cur != null && cur.moveToFirst()) {
-                do {
-                    Member_DataModel d = new Member_DataModel();
-                    d._MemID = cur.getString(cur.getColumnIndex("MemID"));
-                    d._HHID = cur.getString(cur.getColumnIndex("HHID"));
-                    d._DSSID = cur.getString(cur.getColumnIndex("DSSID"));
-                    d._MSlNo = cur.getString(cur.getColumnIndex("MSlNo"));
-                    d._Rth = cur.getString(cur.getColumnIndex("Rth"));
-                    d._RthOth = cur.getString(cur.getColumnIndex("RthOth"));
-                    d._Name = cur.getString(cur.getColumnIndex("Name"));
-                    d._Sex = cur.getString(cur.getColumnIndex("Sex"));
-                    d._BDate_D = cur.getString(cur.getColumnIndex("BDate_D"));
-                    d._BDate_M = cur.getString(cur.getColumnIndex("BDate_M"));
-                    d._BDate_Y = cur.getString(cur.getColumnIndex("BDate_Y"));
-                    d._BDate = cur.getString(cur.getColumnIndex("BDate"));
-                    d._BDateType = cur.getString(cur.getColumnIndex("BDateType"));
-                    d._Age = cur.getString(cur.getColumnIndex("Age"));
-                    d._AgeU = cur.getString(cur.getColumnIndex("AgeU"));
-                    d._MoNo = cur.getString(cur.getColumnIndex("MoNo"));
-                    d._MoName = cur.getString(cur.getColumnIndex("MoName"));
-                    d._FaNo = cur.getString(cur.getColumnIndex("FaNo"));
-                    d._FaName = cur.getString(cur.getColumnIndex("FaName"));
-                    d._EduY = cur.getString(cur.getColumnIndex("EduY"));
-                    d._Employ = cur.getString(cur.getColumnIndex("Employ"));
-                    d._EmployOth = cur.getString(cur.getColumnIndex("EmployOth"));
-                    d._Ocp = cur.getString(cur.getColumnIndex("Ocp"));
-                    d._OcpOth = cur.getString(cur.getColumnIndex("OcpOth"));
-                    d._OcpDk = cur.getString(cur.getColumnIndex("OcpDk"));
-                    d._Religion = cur.getString(cur.getColumnIndex("Religion"));
-                    d._ReligionOth = cur.getString(cur.getColumnIndex("ReligionOth"));
-                    d._Ethnicity = cur.getString(cur.getColumnIndex("Ethnicity"));
-                    d._EthnicityOth = cur.getString(cur.getColumnIndex("EthnicityOth"));
-                    d._MobileNo = cur.getString(cur.getColumnIndex("MobileNo"));
-                    d._MS = cur.getString(cur.getColumnIndex("MS"));
-                    d._MSOth = cur.getString(cur.getColumnIndex("MSOth"));
-                    d._Sp1 = cur.getString(cur.getColumnIndex("Sp1"));
-                    d._Sp1Name = cur.getString(cur.getColumnIndex("Sp1Name"));
-                    d._Sp2 = cur.getString(cur.getColumnIndex("Sp2"));
-                    d._Sp2Name = cur.getString(cur.getColumnIndex("Sp2Name"));
-                    d._Sp3 = cur.getString(cur.getColumnIndex("Sp3"));
-                    d._Sp3Name = cur.getString(cur.getColumnIndex("Sp3Name"));
-                    d._Sp4 = cur.getString(cur.getColumnIndex("Sp4"));
-                    d._Sp4Name = cur.getString(cur.getColumnIndex("Sp4Name"));
-                    d._Pstat = cur.getString(cur.getColumnIndex("Pstat"));
-                    d._LmpDt = cur.getString(cur.getColumnIndex("LmpDt"));
-                    d._gage = cur.getString(cur.getColumnIndex("gage"));
-                    d._gageUnit = cur.getString(cur.getColumnIndex("gageUnit"));
-                    d._anc_regis = cur.getString(cur.getColumnIndex("anc_regis"));
-                    d._anc_resp_home = cur.getString(cur.getColumnIndex("anc_resp_home"));
-                    d._anc_other_home = cur.getString(cur.getColumnIndex("anc_other_home"));
-                    d._anc_govt_hosp = cur.getString(cur.getColumnIndex("anc_govt_hosp"));
-                    d._anc_govt_health = cur.getString(cur.getColumnIndex("anc_govt_health"));
-                    d._anc_govt_health_post = cur.getString(cur.getColumnIndex("anc_govt_health_post"));
-                    d._anc_priv_hosp = cur.getString(cur.getColumnIndex("anc_priv_hosp"));
-                    d._anc_tba_home = cur.getString(cur.getColumnIndex("anc_tba_home"));
-                    d._anc_ngo_hosp = cur.getString(cur.getColumnIndex("anc_ngo_hosp"));
-                    d._anc_other = cur.getString(cur.getColumnIndex("anc_other"));
-                    d._anc_other_specify = cur.getString(cur.getColumnIndex("anc_other_specify"));
-                    d._anc_dk = cur.getString(cur.getColumnIndex("anc_dk"));
-                    d._anc_refuse = cur.getString(cur.getColumnIndex("anc_refuse"));
-                    d._out_date = cur.getString(cur.getColumnIndex("out_date"));
-                    d._Rnd = cur.getString(cur.getColumnIndex("Rnd"));
-                    d._Active = cur.getString(cur.getColumnIndex("Active"));
-                    d._EnType = cur.getString(cur.getColumnIndex("EnType"));
-                    d._ExType = cur.getString(cur.getColumnIndex("ExType"));
-
-                    data.add(d);
-                } while (cur.moveToNext());
-            } else {
-                Log.e("Database Error", "Cursor is null or empty");
-            }
-
-            if (cur != null) {
-                cur.close();
-            }
-            return data;
-        }*/
-
-
-
 
 
  }

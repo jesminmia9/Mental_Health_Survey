@@ -68,6 +68,7 @@ public class Member_list extends AppCompatActivity {
     private String BDate;
     private String Age;
     private String Sex;
+    private String LmpDt;
     private String FaName;
     private String MoName;
 
@@ -442,7 +443,7 @@ public class Member_list extends AppCompatActivity {
                     "FROM Member_Allinfo " +
                     "WHERE HHID LIKE ('" + HHID + "') and Name like('%"+ txtSearchmn.getText().toString() +"%')";*/
 
-            String SQL = "SELECT MemID, DSSID,Pstat, Name,HHHead, BDate, Age,Sex, MoName, FaName " +
+            String SQL = "SELECT MemID, DSSID,Pstat, Name,HHHead, BDate, Age,Sex,LmpDt, MoName, FaName " +
                     "FROM Member_Allinfo " +
                     "WHERE VillID = '" + spnVillage.getSelectedItem().toString().split("-")[0] + "' " +
                     "AND Active = '1'";
@@ -477,7 +478,7 @@ public class Member_list extends AppCompatActivity {
 
         public class ViewHolder extends RecyclerView.ViewHolder {
               LinearLayout secMemberDetail;
-              TextView MemID, DSSID,preganat, Name, HHHead, Age,Sex, BDate, MoName, FaName;
+              TextView MemID, DSSID,preganat, Name, HHHead, Age,Sex, LmpDt, BDate, MoName, FaName;
 
             public ViewHolder(@NonNull View itemView) {
                 super(itemView);
@@ -490,6 +491,7 @@ public class Member_list extends AppCompatActivity {
                 HHHead =(TextView)itemView.findViewById(R.id.HHHead);
              //   Age = (TextView)itemView.findViewById(R.id.MemberAge);
                 Sex = (TextView)itemView.findViewById(R.id.MemberSex);
+                LmpDt =(TextView)itemView.findViewById(R.id.LmpDt);
                 BDate = (TextView)itemView.findViewById(R.id.BDate);
                 MoName = (TextView)itemView.findViewById(R.id.MoName);
                 FaName = (TextView)itemView.findViewById(R.id.FaName);
@@ -518,7 +520,7 @@ public class Member_list extends AppCompatActivity {
             holder.DSSID.setText("DSSID: " + member.getDSSID());
             holder.preganat.setText(member.getPstat() != null && !member.getPstat().equals("NULL") ? member.getPstat() : "");
             holder.Name.setText(member.getName());
-           // holder.Sex.setText(member.getSex());
+         //   holder.LmpDt.setText(member.getLmpDt() != null && !member.getLmpDt().equals("NULL") ? member.getLmpDt() : "");
             holder.HHHead.setText(member.getHHHead() != null && !member.getHHHead().equals("NULL") ? member.getHHHead() : "");
             holder.MoName.setText(member.getMoName() != null && !member.getMoName().equals("NULL") ? member.getMoName() : "");
             holder.FaName.setText(member.getFaName() != null && !member.getFaName().equals("NULL") ? member.getFaName() : "");
@@ -546,6 +548,21 @@ public class Member_list extends AppCompatActivity {
                 }
             } else {
                 holder.BDate.setText(""); // Set empty if no date is provided
+            }
+
+            // Convert date format from yyyy-mm-dd to dd/mm/yyyy
+            String lmprawDate = member.getLmpDt();
+            if (lmprawDate != null && !lmprawDate.isEmpty()) {
+                try {
+                    SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                    SimpleDateFormat outputFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+                    String formattedDate = outputFormat.format(inputFormat.parse(lmprawDate));
+                    holder.LmpDt.setText(formattedDate);
+                } catch (ParseException e) {
+                    holder.LmpDt.setText(lmprawDate); // Fallback to raw date if parsing fails
+                }
+            } else {
+                holder.LmpDt.setText(""); // Set empty if no date is provided
             }
 
         }

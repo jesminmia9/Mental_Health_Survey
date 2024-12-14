@@ -35,8 +35,13 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import org.icddrb.mental_health_survey.R;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+
 import Common.Connection;
 import Common.Global;
 import Utility.MySharedPreferences;
@@ -61,6 +66,7 @@ public class Member_list extends AppCompatActivity {
     private String MSlNo;
     private String BDate;
     private String Age;
+    private String Sex;
     private String FaName;
     private String MoName;
 
@@ -169,6 +175,7 @@ public class Member_list extends AppCompatActivity {
             DSSID =IDbundle.getString ("DSSID");
             BDate =IDbundle.getString ("BDate");
             Age =IDbundle.getString ("Age");
+            Sex =IDbundle.getString ("Sex");
             FaName =IDbundle.getString("FaName");
             MoName =IDbundle.getString("MoName");
 
@@ -433,7 +440,7 @@ public class Member_list extends AppCompatActivity {
                     "FROM Member_Allinfo " +
                     "WHERE HHID LIKE ('" + HHID + "') and Name like('%"+ txtSearchmn.getText().toString() +"%')";*/
 
-            String SQL = "SELECT MemID, DSSID, Name,HHHead, BDate, Age, MoName, FaName " +
+            String SQL = "SELECT MemID, DSSID, Name,HHHead, BDate, Age,Sex, MoName, FaName " +
                     "FROM Member_Allinfo " +
                     "WHERE VillID = '" + spnVillage.getSelectedItem().toString().split("-")[0] + "' " +
                     "AND Active = '1'";
@@ -468,7 +475,7 @@ public class Member_list extends AppCompatActivity {
 
         public class ViewHolder extends RecyclerView.ViewHolder {
               LinearLayout secMemberDetail;
-              TextView MemID, DSSID, Name, HHHead, Age, BDate, MoName, FaName;
+              TextView MemID, DSSID, Name, HHHead, Age,Sex, BDate, MoName, FaName;
 
             public ViewHolder(@NonNull View itemView) {
                 super(itemView);
@@ -479,6 +486,7 @@ public class Member_list extends AppCompatActivity {
                 Name =(TextView)itemView.findViewById(R.id.Name);
                 HHHead =(TextView)itemView.findViewById(R.id.HHHead);
              //   Age = (TextView)itemView.findViewById(R.id.MemberAge);
+                Sex = (TextView)itemView.findViewById(R.id.MemberSex);
                 BDate = (TextView)itemView.findViewById(R.id.BDate);
                 MoName = (TextView)itemView.findViewById(R.id.MoName);
                 FaName = (TextView)itemView.findViewById(R.id.FaName);
@@ -497,20 +505,37 @@ public class Member_list extends AppCompatActivity {
             return new ViewHolder(view);
         }
 
+
+
+
+        // Updated code-
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-
             Member_DataModel member = dataList.get(position);
-          //  holder.MemID.setText("MemID: " + member.getMemID());
             holder.DSSID.setText("DSSID: " + member.getDSSID());
-          //  holder.Name.setText("Name: " + member.getName());
             holder.Name.setText(member.getName());
-            holder.HHHead.setText(member.getHHHead());
-          //  holder.Age.setText(member.getAge());
-            holder.BDate.setText(member.getBDate());
-            holder.MoName.setText(member.getMoName());
-            holder.FaName.setText(member.getFaName());
+            holder.Sex.setText(member.getSex());
+            holder.HHHead.setText(member.getHHHead() != null && !member.getHHHead().equals("NULL") ? member.getHHHead() : "");
+            holder.MoName.setText(member.getMoName() != null && !member.getMoName().equals("NULL") ? member.getMoName() : "");
+            holder.FaName.setText(member.getFaName() != null && !member.getFaName().equals("NULL") ? member.getFaName() : "");
+
+            // Convert date format from yyyy-mm-dd to dd/mm/yyyy
+            String rawDate = member.getBDate();
+            if (rawDate != null && !rawDate.isEmpty()) {
+                try {
+                    SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                    SimpleDateFormat outputFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+                    String formattedDate = outputFormat.format(inputFormat.parse(rawDate));
+                    holder.BDate.setText(formattedDate);
+                } catch (ParseException e) {
+                    holder.BDate.setText(rawDate); // Fallback to raw date if parsing fails
+                }
+            } else {
+                holder.BDate.setText(""); // Set empty if no date is provided
+            }
+
         }
+
 
         public int getItemCount() {
             return dataList.size();

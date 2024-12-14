@@ -171,7 +171,7 @@
                 android:layout_height="wrap_content"
                 android:layout_column="0"
                 android:layout_columnWeight="0.8"
-                android:text="  LMP    :"
+
                 android:textStyle="bold" />
 
             <TextView

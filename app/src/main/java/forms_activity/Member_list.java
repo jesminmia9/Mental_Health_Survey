@@ -560,7 +560,7 @@ public class Member_list extends AppCompatActivity {
                     holder.LmpDt.setText(formattedDate);
                 } catch (ParseException e) {
                   //  holder.LmpDt.setText(lmprawDate); // Fallback to raw date if parsing fails
-                    holder.LmpDt.setText(member.getLmpDt() != null && !member.getLmpDt().equals("NULL") ? member.getLmpDt() : "");
+                    holder.LmpDt.setText("  LMP    :"+ member.getLmpDt() != null && !member.getLmpDt().equals("NULL") ? member.getLmpDt() : "");
                 }
             }
 

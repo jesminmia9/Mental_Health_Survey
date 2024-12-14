@@ -514,10 +514,20 @@ public class Member_list extends AppCompatActivity {
             Member_DataModel member = dataList.get(position);
             holder.DSSID.setText("DSSID: " + member.getDSSID());
             holder.Name.setText(member.getName());
-            holder.Sex.setText(member.getSex());
+           // holder.Sex.setText(member.getSex());
             holder.HHHead.setText(member.getHHHead() != null && !member.getHHHead().equals("NULL") ? member.getHHHead() : "");
             holder.MoName.setText(member.getMoName() != null && !member.getMoName().equals("NULL") ? member.getMoName() : "");
             holder.FaName.setText(member.getFaName() != null && !member.getFaName().equals("NULL") ? member.getFaName() : "");
+
+            // Convert Sex value
+            String sexValue = member.getSex();
+            if ("1".equals(sexValue)) {
+                holder.Sex.setText("Male");
+            } else if ("2".equals(sexValue)) {
+                holder.Sex.setText("Female");
+            } else {
+                holder.Sex.setText(""); // Set empty if no valid value
+            }
 
             // Convert date format from yyyy-mm-dd to dd/mm/yyyy
             String rawDate = member.getBDate();

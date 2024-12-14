@@ -559,11 +559,13 @@ public class Member_list extends AppCompatActivity {
                     String formattedDate = outputFormat.format(inputFormat.parse(lmprawDate));
                     holder.LmpDt.setText(formattedDate);
                 } catch (ParseException e) {
-                    holder.LmpDt.setText(lmprawDate); // Fallback to raw date if parsing fails
+                  //  holder.LmpDt.setText(lmprawDate); // Fallback to raw date if parsing fails
+                    holder.LmpDt.setText(member.getLmpDt() != null && !member.getLmpDt().equals("NULL") ? member.getLmpDt() : "");
                 }
-            } else {
-                holder.LmpDt.setText(""); // Set empty if no date is provided
             }
+
+
+
 
         }
 

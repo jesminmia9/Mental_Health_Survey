@@ -1826,6 +1826,7 @@ public class Connection extends SQLiteOpenHelper {
                 Member_DataModel member = new Member_DataModel();
                 member.setMemID(cursor.getString(cursor.getColumnIndex("MemID")));
                 member.setDSSID(cursor.getString(cursor.getColumnIndex("DSSID")));
+                member.setPstat(cursor.getString(cursor.getColumnIndex("Pstat")));
                 member.setName(cursor.getString(cursor.getColumnIndex("Name")));
                 member.setHHHead(cursor.getString(cursor.getColumnIndex("HHHead")));
                 member.setAge(cursor.getString(cursor.getColumnIndex("Age")));

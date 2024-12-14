@@ -18,10 +18,21 @@
         android:orientation="horizontal">
         <TextView
             android:id="@+id/DSSID"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="35dp"
+            android:layout_weight="1"
             android:gravity="center"
             android:text="@string/DSSID"
+            android:textColor="#006699"
+            android:textSize="21sp"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/preganat"
+            android:layout_width="0dp"
+            android:layout_height="35dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/preganat"
             android:textColor="#006699"
             android:textSize="21sp"
             android:textStyle="bold" />

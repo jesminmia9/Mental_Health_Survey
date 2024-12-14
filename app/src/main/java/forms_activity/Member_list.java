@@ -53,6 +53,7 @@ public class Member_list extends AppCompatActivity {
      double currentLatitude,currentLongitude;
     private String MemID;
     private String DSSID;
+    private String preganat;
     private String Name;
 
     private String GeoLevel7;
@@ -173,6 +174,7 @@ public class Member_list extends AppCompatActivity {
             Name =IDbundle.getString("Name");
             HHHead =IDbundle.getString("HHHead");
             DSSID =IDbundle.getString ("DSSID");
+            preganat =IDbundle.getString ("Pstat");
             BDate =IDbundle.getString ("BDate");
             Age =IDbundle.getString ("Age");
             Sex =IDbundle.getString ("Sex");
@@ -440,7 +442,7 @@ public class Member_list extends AppCompatActivity {
                     "FROM Member_Allinfo " +
                     "WHERE HHID LIKE ('" + HHID + "') and Name like('%"+ txtSearchmn.getText().toString() +"%')";*/
 
-            String SQL = "SELECT MemID, DSSID, Name,HHHead, BDate, Age,Sex, MoName, FaName " +
+            String SQL = "SELECT MemID, DSSID,Pstat, Name,HHHead, BDate, Age,Sex, MoName, FaName " +
                     "FROM Member_Allinfo " +
                     "WHERE VillID = '" + spnVillage.getSelectedItem().toString().split("-")[0] + "' " +
                     "AND Active = '1'";
@@ -475,7 +477,7 @@ public class Member_list extends AppCompatActivity {
 
         public class ViewHolder extends RecyclerView.ViewHolder {
               LinearLayout secMemberDetail;
-              TextView MemID, DSSID, Name, HHHead, Age,Sex, BDate, MoName, FaName;
+              TextView MemID, DSSID,preganat, Name, HHHead, Age,Sex, BDate, MoName, FaName;
 
             public ViewHolder(@NonNull View itemView) {
                 super(itemView);
@@ -483,6 +485,7 @@ public class Member_list extends AppCompatActivity {
                 secMemberDetail = (LinearLayout) findViewById(R.id.secMemberDetail);
                 MemID=(TextView)itemView.findViewById(R.id.MemberID);
                 DSSID=(TextView)itemView.findViewById(R.id.DSSID);
+                preganat=(TextView)itemView.findViewById(R.id.preganat);
                 Name =(TextView)itemView.findViewById(R.id.Name);
                 HHHead =(TextView)itemView.findViewById(R.id.HHHead);
              //   Age = (TextView)itemView.findViewById(R.id.MemberAge);
@@ -513,6 +516,7 @@ public class Member_list extends AppCompatActivity {
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             Member_DataModel member = dataList.get(position);
             holder.DSSID.setText("DSSID: " + member.getDSSID());
+            holder.preganat.setText(member.getPstat() != null && !member.getPstat().equals("NULL") ? member.getPstat() : "");
             holder.Name.setText(member.getName());
            // holder.Sex.setText(member.getSex());
             holder.HHHead.setText(member.getHHHead() != null && !member.getHHHead().equals("NULL") ? member.getHHHead() : "");

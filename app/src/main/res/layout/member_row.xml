@@ -9,7 +9,7 @@
     android:paddingBottom="@dimen/padding_list_row"
     android:paddingTop="0dp">
 
-    <!-- Section for DSSID -->
+    <!-- Section for DSSID [DEATH STATUS]-->
     <LinearLayout
         android:id="@+id/secMemberName"
         android:layout_width="match_parent"

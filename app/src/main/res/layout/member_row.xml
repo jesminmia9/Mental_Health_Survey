@@ -29,13 +29,16 @@
         <TextView
             android:id="@+id/preganat"
             android:layout_width="0dp"
-            android:layout_height="35dp"
-            android:layout_weight="1"
+            android:layout_height="30dp"
+            android:layout_weight="0.24"
             android:gravity="center"
-            android:text="@string/preganat"
-            android:textColor="#006699"
-            android:textSize="21sp"
-            android:textStyle="bold" />
+            android:textColor="#FFFFFF"
+            android:textSize="19sp"
+            android:textStyle="bold"
+            android:background="@drawable/button_background"
+            android:padding="0dp"
+            android:text="Pregnant" />
+
     </LinearLayout>
 
     <!-- Section for Member Details -->

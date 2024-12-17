@@ -74,6 +74,8 @@ public class Member_list extends AppCompatActivity {
 
 
 
+
+
     //Disabled Back/Home key
     //-----------------------
     @Override
@@ -103,6 +105,9 @@ public class Member_list extends AppCompatActivity {
     Spinner spnVillage;
     Spinner spnCompound;
     Spinner spnHousehold;
+
+    ImageButton btnSearch;
+    EditText txtSearch;
 
 
     static String STARTTIME = "";
@@ -142,24 +147,16 @@ public class Member_list extends AppCompatActivity {
                     adb.show();
                 }});
 
-            txtSearchmn = (EditText)findViewById(R.id.MNtxtSearch);
+            txtSearch = (EditText)findViewById(R.id.txtSearch);
+            btnSearch = (ImageButton) findViewById(R.id.btnSearch);
 
-            /*txtSearchmn.addTextChangedListener(new TextWatcher() {
+            btnSearch.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View view) {
+                    DataSearch(txtSearch.getText().toString());
 
-               public void afterTextChanged(Editable s) {
-                   if(txtSearchmn.getText().toString().length()>0)
-                       DataSearch();
+                }});
 
-               }
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                }
-
-            });*/
 
             IDbundle = getIntent().getExtras();
             MemID    = IDbundle.getString("MemID");
@@ -393,8 +390,8 @@ public class Member_list extends AppCompatActivity {
 
           //  Connection.LocalizeLanguage(Member_list.this, MODULEID, LANGUAGEID);
            // DataSearch(txtSearch.getText().toString());
-           // DataSearch(txtSearchmn.getText().toString());
-            DataSearch();
+            DataSearch(txtSearch.getText().toString());
+           // DataSearch();
 
         }
         catch(Exception  e)
@@ -419,11 +416,12 @@ public class Member_list extends AppCompatActivity {
         if (resultCode == Activity.RESULT_CANCELED) {
             //Write your code if there's no result
         } else {
-            DataSearch( );
+           // DataSearch( );
+            DataSearch(txtSearch.getText().toString());
         }
     }
 
-    private void DataSearch()
+    private void DataSearch(String SearchText)
     {
         try
         {
@@ -482,14 +480,13 @@ public class Member_list extends AppCompatActivity {
 
             public ViewHolder(@NonNull View itemView) {
                 super(itemView);
-               // name = itemView.findViewById(R.id.memberName);
+
                 secMemberDetail = (LinearLayout) findViewById(R.id.secMemberDetail);
                 MemID=(TextView)itemView.findViewById(R.id.MemberID);
                 DSSID=(TextView)itemView.findViewById(R.id.DSSID);
                 preganat=(TextView)itemView.findViewById(R.id.preganat);
                 Name =(TextView)itemView.findViewById(R.id.Name);
                 HHHead =(TextView)itemView.findViewById(R.id.HHHead);
-             //   Age = (TextView)itemView.findViewById(R.id.MemberAge);
                 Sex = (TextView)itemView.findViewById(R.id.MemberSex);
                 LmpDt =(TextView)itemView.findViewById(R.id.LmpDt);
                 BDate = (TextView)itemView.findViewById(R.id.BDate);
@@ -518,12 +515,38 @@ public class Member_list extends AppCompatActivity {
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             Member_DataModel member = dataList.get(position);
             holder.DSSID.setText("DSSID: " + member.getDSSID());
-            holder.preganat.setText(member.getPstat() != null && !member.getPstat().equals("NULL") ? member.getPstat() : "");
             holder.Name.setText(member.getName());
-         //   holder.LmpDt.setText(member.getLmpDt() != null && !member.getLmpDt().equals("NULL") ? member.getLmpDt() : "");
+            holder.preganat.setText(member.getPstat() != null && !member.getPstat().equals("NULL") ? member.getPstat() : "");
             holder.HHHead.setText(member.getHHHead() != null && !member.getHHHead().equals("NULL") ? member.getHHHead() : "");
             holder.MoName.setText(member.getMoName() != null && !member.getMoName().equals("NULL") ? member.getMoName() : "");
             holder.FaName.setText(member.getFaName() != null && !member.getFaName().equals("NULL") ? member.getFaName() : "");
+
+            // Handle Preganat and LmpDt display logic
+            String preganatValue = member.getPstat(); // Assuming Pstat holds the pregnant status
+            if ("41".equals(preganatValue)) {
+                holder.preganat.setText("Pregnant"); // Display 'Pregnant' instead of 41
+                holder.preganat.setVisibility(View.VISIBLE);
+
+                // Display LmpDt with proper formatting if needed
+                String lmprawDate = member.getLmpDt();
+                if (lmprawDate != null && !lmprawDate.isEmpty()) {
+                    try {
+                        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                        SimpleDateFormat outputFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+                        String formattedDate = outputFormat.format(inputFormat.parse(lmprawDate));
+                        holder.LmpDt.setText(formattedDate);
+                    } catch (ParseException e) {
+                        holder.LmpDt.setText(lmprawDate); // Fallback to raw date if parsing fails
+                    }
+                } else {
+                    holder.LmpDt.setText(""); // Set empty if no date is provided
+                }
+                holder.LmpDt.setVisibility(View.VISIBLE);
+            } else {
+                // Hide both preganat and LmpDt if the condition is not met
+                holder.preganat.setVisibility(View.GONE);
+                holder.LmpDt.setVisibility(View.GONE);
+            }
 
             // Convert Sex value
             String sexValue = member.getSex();
@@ -549,22 +572,6 @@ public class Member_list extends AppCompatActivity {
             } else {
                 holder.BDate.setText(""); // Set empty if no date is provided
             }
-
-            // Convert date format from yyyy-mm-dd to dd/mm/yyyy
-            String lmprawDate = member.getLmpDt();
-            if (lmprawDate != null && !lmprawDate.isEmpty()) {
-                try {
-                    SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-                    SimpleDateFormat outputFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-                    String formattedDate = outputFormat.format(inputFormat.parse(lmprawDate));
-                    holder.LmpDt.setText(formattedDate);
-                } catch (ParseException e) {
-                  //  holder.LmpDt.setText(lmprawDate); // Fallback to raw date if parsing fails
-                    holder.LmpDt.setText("  LMP    :"+ member.getLmpDt() != null && !member.getLmpDt().equals("NULL") ? member.getLmpDt() : "");
-                }
-            }
-
-
 
 
         }

@@ -34,6 +34,18 @@ public class Member_DataModel{
         public void setDSSID(String newValue){
               _DSSID = newValue;
          }
+
+    private String _VillID = "";
+    public String getVillID(){
+        return _VillID;
+    }
+    public void setVillID(String newValue){
+        _VillID = newValue;
+    }
+
+
+
+
         private String _MSlNo = "";
         public String getMSlNo(){
               return _MSlNo;
@@ -514,6 +526,7 @@ public class Member_DataModel{
                  contentValues.put("MemID", _MemID);
                  contentValues.put("HHID", _HHID);
                  contentValues.put("DSSID", _DSSID);
+                  contentValues.put("VillID", _VillID);
                  contentValues.put("MSlNo", _MSlNo);
                  contentValues.put("Rth", _Rth);
                  contentValues.put("RthOth", _RthOth);
@@ -601,7 +614,7 @@ public class Member_DataModel{
                  ContentValues contentValues = new ContentValues();
                  contentValues.put("MemID", _MemID);
                  contentValues.put("HHID", _HHID);
-                 contentValues.put("DSSID", _DSSID);
+                 contentValues.put("VillID", _VillID);
                  contentValues.put("MSlNo", _MSlNo);
                  contentValues.put("Rth", _Rth);
                  contentValues.put("RthOth", _RthOth);
@@ -696,6 +709,7 @@ public class Member_DataModel{
                 d._MemID = cur.getString(cur.getColumnIndex("MemID"));
                 d._HHID = cur.getString(cur.getColumnIndex("HHID"));
                 d._DSSID = cur.getString(cur.getColumnIndex("DSSID"));
+                d._VillID = cur.getString(cur.getColumnIndex("VillID"));
                 d._MSlNo = cur.getString(cur.getColumnIndex("MSlNo"));
                 d._Rth = cur.getString(cur.getColumnIndex("Rth"));
                 d._RthOth = cur.getString(cur.getColumnIndex("RthOth"));

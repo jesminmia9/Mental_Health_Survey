@@ -2,6 +2,7 @@ package forms_activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -57,6 +58,7 @@ public class Member_list extends AppCompatActivity {
      double currentLatitude,currentLongitude;
     private String MemID;
     private String DSSID;
+    static String VillID = "";
     private String preganat;
     private String Name;
 
@@ -103,7 +105,7 @@ public class Member_list extends AppCompatActivity {
     private RecyclerView recyclerView;
     private DataAdapter mAdapter;
     static String TableName;
-    EditText txtSearchmn;
+
     Bundle IDbundle;
     Spinner spnLocation;
     Spinner spnVillage;
@@ -156,7 +158,7 @@ public class Member_list extends AppCompatActivity {
 
             btnSearch.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
-                    DataSearch(txtSearch.getText().toString());
+                    PageRefresh();
 
                 }});
 
@@ -244,9 +246,6 @@ public class Member_list extends AppCompatActivity {
 
 
 
-
-
-
             spnCompound.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -299,82 +298,6 @@ public class Member_list extends AppCompatActivity {
             });
 
 
-            /*spnHousehold.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-             @Override
-             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                 String selectedHousehold = parent.getSelectedItem().toString().split("-")[0];
-                 String query = "SELECT * FROM Member_Allinfo WHERE HHID='" + selectedHousehold + "'";
-                  List<Member_DataModel> updatedMembers = C.fetchMembers(query);
-
-                  dataList.clear();
-                  dataList.addAll(updatedMembers);
-                  mAdapter.notifyDataSetChanged();
-
-                  }
-
-                @Override
-             public void onNothingSelected(AdapterView<?> parent) {
-
-             }
-         });*/
-
-            /*spnHousehold.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    String selectedHousehold = parent.getSelectedItem().toString().split("-")[0];
-
-                    String query = "SELECT * FROM Member_Allinfo WHERE HHID='" + selectedHousehold + "'";
-                    List<Member_DataModel> updatedMembers = C.fetchMembers(query);
-
-                    if (updatedMembers != null) {
-                        dataList.clear();
-                        dataList.addAll(updatedMembers);
-                        mAdapter.notifyDataSetChanged();
-                    } else {
-                        // Handle error, e.g., display an error message or clear the list
-                        Log.e("Error", "Failed to fetch members for household: " + selectedHousehold);
-                        dataList.clear();
-                        mAdapter.notifyDataSetChanged();
-                    }
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-                    // Handle the case when no household is selected
-                }
-            });*/
-
-            /*spnHousehold.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    if (spnHousehold.getSelectedItem() != null && position != 0) {
-                        String selectedHousehold = parent.getSelectedItem().toString().split("-")[0];
-
-                        new Thread(() -> {
-                            String query = "SELECT * FROM Member_Allinfo WHERE HHID='" + selectedHousehold + "'";
-                            List<Member_DataModel> updatedMembers = C.fetchMembers(query);
-
-                            // Post the result to the main thread
-                            Handler mainHandler = new Handler(Looper.getMainLooper());
-                            mainHandler.post(() -> {
-                                if (updatedMembers != null) {
-                                    dataList.clear();
-                                    dataList.addAll(updatedMembers);
-                                    mAdapter.notifyDataSetChanged();
-                                } else {
-                                    // Handle empty results or errors
-                                    Log.w("Member_list", "No members found for household: " + selectedHousehold);
-                                }
-                            });
-                        }).start();
-                    }
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-                    // Handle the case when no household is selected
-                }
-            });*/
 
 
 
@@ -392,9 +315,8 @@ public class Member_list extends AppCompatActivity {
             recyclerView.setItemAnimator(new DefaultItemAnimator());
             recyclerView.setAdapter(mAdapter);
 
-          //  Connection.LocalizeLanguage(Member_list.this, MODULEID, LANGUAGEID);
+
            // DataSearch(txtSearch.getText().toString());
-            DataSearch(txtSearch.getText().toString());
            // DataSearch();
 
         }
@@ -403,6 +325,34 @@ public class Member_list extends AppCompatActivity {
             Connection.MessageBox(Member_list.this, e.getMessage());
             return;
         }
+    }
+
+    private void PageRefresh()
+    {
+        final ProgressDialog progDailog = ProgressDialog.show(Member_list.this, "", "Please Wait . . .", true);
+
+        new Thread() {
+            public void run() {
+                try {
+                    if(spnVillage.getCount()>0)
+                        VillID = spnVillage.getSelectedItem().toString().length()==0 ? "" : spnVillage.getSelectedItem().toString().split("-")[0].toString();
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+
+                            DataSearch(VillID, HHHead);
+
+                            progDailog.dismiss();
+                        }
+                    });
+                } catch (Exception e) {
+
+                }
+                progDailog.dismiss();
+            }
+        }.start();
     }
 
     @Override
@@ -421,33 +371,21 @@ public class Member_list extends AppCompatActivity {
             //Write your code if there's no result
         } else {
            // DataSearch( );
-            DataSearch(txtSearch.getText().toString());
+         //   DataSearch(txtSearch.getText().toString());
         }
     }
 
-    private void DataSearch(String SearchText)
+    private void DataSearch(String VillID, String HHHead)
     {
         try
         {
             Member_DataModel d = new Member_DataModel();
-            /*String SQL = "SELECT MemID, DSSID, Name, BDate, Age, MoName, FaName " +
-                    "FROM Member m " +
-                    "INNER JOIN Household h " +
-                    "ON m.HHID = h.HHID " +
-                    "WHERE m.HHID LIKE ('" + HHID + "')";*/
 
-           /*  SELECT MemID, DSSID, Name, BDate, Age, MoName, FaName " +
-                    "FROM Member m " +
-                    "INNER JOIN Household h " +
-                    "ON m.HHID = h.HHID " +
-                    "WHERE m.HHID LIKE ('" + HHID + "')"*/
-           /* String SQL = "SELECT MemID, DSSID, Name,HHHead, BDate, Age, MoName, FaName " +
-                    "FROM Member_Allinfo " +
-                    "WHERE HHID LIKE ('" + HHID + "') and Name like('%"+ txtSearchmn.getText().toString() +"%')";*/
 
             String SQL = "SELECT MemID, DSSID,Pstat, Name,HHHead, BDate, Age,Sex,LmpDt, MoName, FaName " +
                     "FROM Member_Allinfo " +
                     "WHERE VillID = '" + spnVillage.getSelectedItem().toString().split("-")[0] + "' " +
+                    "AND (HHHead like('"+ txtSearch.getText().toString() +"%') or HHHead like('%"+ txtSearch.getText().toString() +"%'))\n" +
                     "AND Active = '1'";
 
 
@@ -698,37 +636,5 @@ public class Member_list extends AppCompatActivity {
             void onLongClick(View view, int position);
         }
     }
-
-
-   /* protected Dialog onCreateDialog(int id) {
-        final Calendar c = Calendar.getInstance();
-        switch (id) {
-            case DATE_DIALOG:
-                return new DatePickerDialog(this, mDateSetListener,g.mYear,g.mMonth-1,g.mDay);
-        }
-        return null;
-    }*/
-
-
-    /*private DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
-        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-            mYear = year; mMonth = monthOfYear+1; mDay = dayOfMonth;
-            EditText dtpDate;
-            dtpDate = (EditText)findViewById(R.id.dtpFDate);
-            if (VariableID.equals("dtpFDate"))
-            {
-                dtpDate = (EditText)findViewById(R.id.dtpFDate);
-            }
-            else if (VariableID.equals("dtpTDate"))
-            {
-                dtpDate = (EditText)findViewById(R.id.dtpTDate);
-            }
-            dtpDate.setText(new StringBuilder()
-                    .append(Global.Right("00"+mDay,2)).append("/")
-                    .append(Global.Right("00"+mMonth,2)).append("/")
-                    .append(mYear));
-        }
-    };*/
-
 
 }

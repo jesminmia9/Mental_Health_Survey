@@ -2,7 +2,6 @@ package forms_activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,13 +11,10 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.StyleSpan;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -28,7 +24,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -36,24 +31,26 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import android.text.Editable;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import org.icddrb.mental_health_survey.R;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
 import Common.Connection;
 import Common.Global;
 import Utility.MySharedPreferences;
 import forms_datamodel.Member_DataModel;
+import android.text.TextWatcher;
+import android.text.Editable;
+import android.widget.EditText;
+
 
 
 public class Member_list extends AppCompatActivity {
@@ -330,50 +327,54 @@ public class Member_list extends AppCompatActivity {
         }
     }
 
-    private void performSearch()
-    {
+    private void performSearch() {
         String searchText = txtSearch.getText().toString().trim();
-        if (spnVillage.getSelectedItem() == null || TextUtils.isEmpty(searchText)) {
-            Toast.makeText(this, "Please select a village and enter a search term.", Toast.LENGTH_SHORT).show();
+
+        if (TextUtils.isEmpty(searchText)) {
+            Toast.makeText(this, "Please enter a search term.", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        String selectedVillage = spnVillage.getSelectedItem().toString().split("-")[0];
-
-        String query = "SELECT MemID, DSSID, Pstat, Name, HHHead, BDate, Age, Sex, LmpDt, MoName, FaName " +
-                "FROM Member_Allinfo " +
-                "WHERE VillID = '" + selectedVillage + "' " +
-                "AND (HHHead LIKE '%" + searchText + "%') " +
-                "AND Active = '1'";
-
-        Log.d("SQL_QUERY", query);
-
-        fetchAndUpdateData(query);
-    }
-
-    private void fetchAndUpdateData(String query) {
-        try {
-            Member_DataModel model = new Member_DataModel();
-            List<Member_DataModel> updatedList = model.SelectAll(this, query);
-
-            if (updatedList.isEmpty()) {
-                Toast.makeText(this, "No records found.", Toast.LENGTH_SHORT).show();
-            } else {
-                dataList.clear();
-                dataList.addAll(updatedList);
-                mAdapter.notifyDataSetChanged();
+        // Filter the existing list
+        List<Member_DataModel> filteredList = new ArrayList<>();
+        for (Member_DataModel member : dataList) {
+            if (member.getHHHead() != null && member.getHHHead().toLowerCase().contains(searchText.toLowerCase())) {
+                filteredList.add(member);
             }
-        } catch (Exception e) {
-            Log.e("SEARCH_ERROR", e.getMessage(), e);
-            Toast.makeText(this, "Error fetching data: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
+
+        // Update RecyclerView with the filtered list
+        if (filteredList.isEmpty()) {
+            Toast.makeText(this, "No results found for the search term.", Toast.LENGTH_SHORT).show();
+        }
+        mAdapter = new DataAdapter(filteredList);
+        recyclerView.setAdapter(mAdapter);
     }
+
+    txtSearch.addTextChangedListener(new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            if (TextUtils.isEmpty(charSequence)) {
+                // Reset the list when search is cleared
+                mAdapter = new DataAdapter(dataList);
+                recyclerView.setAdapter(mAdapter);
+            }
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {}
+    });
+
+
+
 
     @Override
     protected void onResume() {
         super.onResume();
-      //  tmpBariNo = "";
-      //  DataSearch();
+
     }
 
 

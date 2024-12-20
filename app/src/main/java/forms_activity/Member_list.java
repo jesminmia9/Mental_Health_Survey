@@ -49,7 +49,7 @@ import Utility.MySharedPreferences;
 import forms_datamodel.Member_DataModel;
 import android.text.TextWatcher;
 import android.text.Editable;
-import android.widget.EditText;
+
 
 
 
@@ -350,24 +350,6 @@ public class Member_list extends AppCompatActivity {
         mAdapter = new DataAdapter(filteredList);
         recyclerView.setAdapter(mAdapter);
     }
-
-    txtSearch.addTextChangedListener(new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
-
-        @Override
-        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            if (TextUtils.isEmpty(charSequence)) {
-                // Reset the list when search is cleared
-                mAdapter = new DataAdapter(dataList);
-                recyclerView.setAdapter(mAdapter);
-            }
-        }
-
-        @Override
-        public void afterTextChanged(Editable editable) {}
-    });
-
 
 
 

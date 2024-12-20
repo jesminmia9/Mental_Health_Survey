@@ -161,7 +161,7 @@ public class Member_list extends AppCompatActivity {
 
             btnSearch.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
-                    PageRefresh();
+                    performSearch();
 
                 }});
 
@@ -330,7 +330,7 @@ public class Member_list extends AppCompatActivity {
         }
     }
 
-    private void PageRefresh()
+    private void performSearch()
     {
         String searchText = txtSearch.getText().toString().trim();
         if (spnVillage.getSelectedItem() == null || TextUtils.isEmpty(searchText)) {

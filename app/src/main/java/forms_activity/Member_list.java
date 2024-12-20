@@ -16,6 +16,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.TextUtils;
 import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -34,6 +35,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -329,30 +332,41 @@ public class Member_list extends AppCompatActivity {
 
     private void PageRefresh()
     {
-        final ProgressDialog progDailog = ProgressDialog.show(Member_list.this, "", "Please Wait . . .", true);
+        String searchText = txtSearch.getText().toString().trim();
+        if (spnVillage.getSelectedItem() == null || TextUtils.isEmpty(searchText)) {
+            Toast.makeText(this, "Please select a village and enter a search term.", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-        new Thread() {
-            public void run() {
-                try {
-                    if(spnVillage.getCount()>0)
-                        VillID = spnVillage.getSelectedItem().toString().length()==0 ? "" : spnVillage.getSelectedItem().toString().split("-")[0].toString();
+        String selectedVillage = spnVillage.getSelectedItem().toString().split("-")[0];
 
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
+        String query = "SELECT MemID, DSSID, Pstat, Name, HHHead, BDate, Age, Sex, LmpDt, MoName, FaName " +
+                "FROM Member_Allinfo " +
+                "WHERE VillID = '" + selectedVillage + "' " +
+                "AND (HHHead LIKE '%" + searchText + "%') " +
+                "AND Active = '1'";
 
+        Log.d("SQL_QUERY", query);
 
-                            DataSearch(VillID, HHHead);
+        fetchAndUpdateData(query);
+    }
 
-                            progDailog.dismiss();
-                        }
-                    });
-                } catch (Exception e) {
+    private void fetchAndUpdateData(String query) {
+        try {
+            Member_DataModel model = new Member_DataModel();
+            List<Member_DataModel> updatedList = model.SelectAll(this, query);
 
-                }
-                progDailog.dismiss();
+            if (updatedList.isEmpty()) {
+                Toast.makeText(this, "No records found.", Toast.LENGTH_SHORT).show();
+            } else {
+                dataList.clear();
+                dataList.addAll(updatedList);
+                mAdapter.notifyDataSetChanged();
             }
-        }.start();
+        } catch (Exception e) {
+            Log.e("SEARCH_ERROR", e.getMessage(), e);
+            Toast.makeText(this, "Error fetching data: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

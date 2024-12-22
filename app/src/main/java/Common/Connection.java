@@ -13,6 +13,7 @@ import android.net.NetworkInfo;
 import android.os.Environment;
 import android.os.Handler;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -1819,28 +1820,42 @@ public class Connection extends SQLiteOpenHelper {
 
     public List<Member_DataModel> fetchMembers(String query) {
         List<Member_DataModel> members = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(query, null);
-        if (cursor.moveToFirst()) {
-            do {
-                Member_DataModel member = new Member_DataModel();
-                member.setMemID(cursor.getString(cursor.getColumnIndex("MemID")));
-                member.setDSSID(cursor.getString(cursor.getColumnIndex("DSSID")));
-                member.setPstat(cursor.getString(cursor.getColumnIndex("Pstat")));
-                member.setName(cursor.getString(cursor.getColumnIndex("Name")));
-                member.setHHHead(cursor.getString(cursor.getColumnIndex("HHHead")));
-                member.setAge(cursor.getString(cursor.getColumnIndex("Age")));
-                member.setSex(cursor.getString(cursor.getColumnIndex("Sex")));
-                member.setLmpDt(cursor.getString(cursor.getColumnIndex("LmpDt")));
-                member.setBDate(cursor.getString(cursor.getColumnIndex("BDate")));
-                member.setMoName(cursor.getString(cursor.getColumnIndex("MoName")));
-                member.setFaName(cursor.getString(cursor.getColumnIndex("FaName")));
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
 
-                members.add(member);
-            } while (cursor.moveToNext());
+        try {
+            db = this.getReadableDatabase();
+            cursor = db.rawQuery(query, null);
+
+            if (cursor.moveToFirst()) {
+                do {
+                    Member_DataModel member = new Member_DataModel();
+                    member.setMemID(cursor.getString(cursor.getColumnIndexOrThrow("MemID")));
+                    member.setDSSID(cursor.getString(cursor.getColumnIndexOrThrow("DSSID")));
+                    member.setVillID(cursor.getString(cursor.getColumnIndexOrThrow("VillID")));
+                    member.setPstat(cursor.getString(cursor.getColumnIndexOrThrow("Pstat")));
+                    member.setName(cursor.getString(cursor.getColumnIndexOrThrow("Name")));
+                    member.setHHHead(cursor.getString(cursor.getColumnIndexOrThrow("HHHead")));
+                    member.setAge(cursor.getString(cursor.getColumnIndexOrThrow("Age")));
+                    member.setSex(cursor.getString(cursor.getColumnIndexOrThrow("Sex")));
+                    member.setLmpDt(cursor.getString(cursor.getColumnIndexOrThrow("LmpDt")));
+                    member.setBDate(cursor.getString(cursor.getColumnIndexOrThrow("BDate")));
+                    member.setMoName(cursor.getString(cursor.getColumnIndexOrThrow("MoName")));
+                    member.setFaName(cursor.getString(cursor.getColumnIndexOrThrow("FaName")));
+                    member.setActive(cursor.getString(cursor.getColumnIndexOrThrow("Active")));
+
+                    members.add(member);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            Log.e("DatabaseError", "Error fetching members: " + e.getMessage());
+        } finally {
+            if (cursor != null) cursor.close();
+            if (db != null) db.close();
         }
-        cursor.close();
+
         return members;
     }
+
 
 }

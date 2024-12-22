@@ -327,29 +327,57 @@ public class Member_list extends AppCompatActivity {
         }
     }
 
+
+
     private void performSearch() {
         String searchText = txtSearch.getText().toString().trim();
 
+        // Validate search text
         if (TextUtils.isEmpty(searchText)) {
             Toast.makeText(this, "Please enter a search term.", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Filter the existing list
-        List<Member_DataModel> filteredList = new ArrayList<>();
-        for (Member_DataModel member : dataList) {
-            if (member.getHHHead() != null && member.getHHHead().toLowerCase().contains(searchText.toLowerCase())) {
-                filteredList.add(member);
-            }
+        // Validate spinner selection
+        if (spnVillage.getSelectedItem() == null || spnVillage.getSelectedItem().toString().isEmpty()) {
+            Toast.makeText(this, "Please select a valid village.", Toast.LENGTH_SHORT).show();
+            return;
         }
 
-        // Update RecyclerView with the filtered list
-        if (filteredList.isEmpty()) {
-            Toast.makeText(this, "No results found for the search term.", Toast.LENGTH_SHORT).show();
+        // Extract Village ID safely
+        String selectedVillage = spnVillage.getSelectedItem().toString();
+        String selectedVillageId = "";
+        if (selectedVillage.contains("-")) {
+            selectedVillageId = selectedVillage.split("-")[0].trim();
+        } else {
+            Toast.makeText(this, "Invalid village format.", Toast.LENGTH_SHORT).show();
+            return;
         }
-        mAdapter = new DataAdapter(filteredList);
-        recyclerView.setAdapter(mAdapter);
+
+        // Construct SQL query
+        String query = "SELECT MemID, DSSID, VillID, Pstat, Name, HHHead, Age, Sex, LmpDt, BDate,  MoName, FaName, Active " +
+                "FROM Member_Allinfo " +
+                "WHERE VillID = '" + selectedVillageId + "' " +
+                "AND HHHead LIKE '%" + searchText + "%' " +
+                "AND Active = '1'";
+
+        try {
+            // Fetch filtered members from the database
+            Connection connection = new Connection(this);
+            List<Member_DataModel> filteredMembers = connection.fetchMembers(query);
+
+            // Update RecyclerView or show no results message
+            if (filteredMembers.isEmpty()) {
+                Toast.makeText(this, "No results found for the search term.", Toast.LENGTH_SHORT).show();
+            } else {
+                mAdapter = new DataAdapter(filteredMembers);
+                recyclerView.setAdapter(mAdapter);
+            }
+        } catch (Exception e) {
+            Toast.makeText(this, "Error fetching data: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
+
 
 
 

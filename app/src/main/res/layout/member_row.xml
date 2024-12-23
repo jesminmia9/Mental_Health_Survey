@@ -15,31 +15,50 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#F3F3F3"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <!-- DSSID TextView -->
         <TextView
             android:id="@+id/DSSID"
             android:layout_width="0dp"
-            android:layout_height="35dp"
+            android:layout_height="40dp"
             android:layout_weight="1"
             android:gravity="center"
             android:text="@string/DSSID"
             android:textColor="#006699"
             android:textSize="21sp"
             android:textStyle="bold" />
+
+        <!-- Pregnant Button -->
         <TextView
             android:id="@+id/preganat"
             android:layout_width="0dp"
-            android:layout_height="30dp"
-            android:layout_weight="0.24"
+            android:layout_height="40dp"
+            android:layout_weight="1"
             android:gravity="center"
             android:textColor="#FFFFFF"
             android:textSize="19sp"
             android:textStyle="bold"
             android:background="@drawable/button_background"
-            android:padding="0dp"
+            android:padding="7dp"
             android:text="Pregnant" />
 
+        <!-- Death Button -->
+        <TextView
+            android:id="@+id/DthStatus"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="#FFFFFF"
+            android:textSize="19sp"
+            android:textStyle="bold"
+            android:background="@drawable/button_background"
+            android:padding="8dp"
+            android:text="Death" />
     </LinearLayout>
+
 
     <!-- Section for Member Details -->
     <LinearLayout
@@ -81,7 +100,7 @@
             <!-- Row 2 -->
             <TextView
                 android:id="@+id/labelHHHead"
-                android:text="HHHead:"
+                android:text="HHHead :"
                 android:textStyle="bold"
                 android:layout_column="2"
                 android:layout_width="0dp"
@@ -117,7 +136,7 @@
 
             <!-- Row 4 -->
             <TextView
-                android:text="Mother  :"
+                android:text="Mother   :"
                 android:textStyle="bold"
                 android:layout_column="2"
                 android:layout_width="0dp"
@@ -140,7 +159,7 @@
                 android:layout_height="wrap_content"
                 android:layout_column="0"
                 android:layout_columnWeight="0.8"
-                android:text="  Sex     :"
+                android:text="  Sex      :"
                 android:textStyle="bold" />
 
             <TextView
@@ -153,7 +172,7 @@
 
             <!-- Row 6 -->
             <TextView
-                android:text="Father   :"
+                android:text="Father    :"
                 android:textStyle="bold"
                 android:layout_column="2"
                 android:layout_width="0dp"
@@ -169,13 +188,16 @@
                 android:layout_columnWeight="1.1" />
 
             <TextView
-                android:id="@+id/DOD"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:id="@+id/DthDate"
                 android:layout_column="0"
-                android:layout_columnWeight="0.8"
-                android:text="  DOD    :"
-                android:textStyle="bold" />
+                android:layout_columnSpan="2"
+                android:layout_width="0dp"
+                android:maxLength="28"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="2"
+                android:text=" DOD    :"
+                android:paddingStart="5dp"
+                android:textStyle="bold"/>
 
 
 

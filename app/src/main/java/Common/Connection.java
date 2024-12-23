@@ -1834,6 +1834,7 @@ public class Connection extends SQLiteOpenHelper {
                     member.setDSSID(cursor.getString(cursor.getColumnIndexOrThrow("DSSID")));
                     member.setVillID(cursor.getString(cursor.getColumnIndexOrThrow("VillID")));
                     member.setPstat(cursor.getString(cursor.getColumnIndexOrThrow("Pstat")));
+                    member.setDthDate(cursor.getString(cursor.getColumnIndexOrThrow("DthDate")));
                     member.setName(cursor.getString(cursor.getColumnIndexOrThrow("Name")));
                     member.setHHHead(cursor.getString(cursor.getColumnIndexOrThrow("HHHead")));
                     member.setAge(cursor.getString(cursor.getColumnIndexOrThrow("Age")));

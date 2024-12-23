@@ -39,6 +39,19 @@
             android:padding="0dp"
             android:text="Pregnant" />
 
+        <TextView
+            android:id="@+id/DthDate"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_weight="0.24"
+            android:gravity="center"
+            android:textColor="#FFFFFF"
+            android:textSize="19sp"
+            android:textStyle="bold"
+            android:background="@drawable/button_background"
+            android:padding="0dp"
+            android:text="Death" />
+
     </LinearLayout>
 
     <!-- Section for Member Details -->

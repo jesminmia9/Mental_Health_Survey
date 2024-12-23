@@ -81,6 +81,38 @@ public class Member_DataModel{
     public void setHHHead(String newValue){
         _HHHead = newValue;
     }
+
+    private String _DthDate;
+    public String getDthDate(){
+        return _DthDate;
+    }
+    public void setDthDate(String newValue){
+        _DthDate = newValue;
+    }
+
+
+    private String _MExType;
+    public String getMExType(){
+        return _MExType;
+    }
+    public void setMExType(String newValue){
+        _MExType = newValue;
+    }
+
+
+    private String _ExitType;
+    public String getExitType(){
+        return _ExitType;
+    }
+    public void setExitType(String newValue){
+        _ExitType = newValue;
+    }
+
+
+
+
+
+
         private String _Sex = "";
         public String getSex(){
               return _Sex;
@@ -715,6 +747,9 @@ public class Member_DataModel{
                 d._RthOth = cur.getString(cur.getColumnIndex("RthOth"));
                 d._Name = cur.getString(cur.getColumnIndex("Name"));
                 d._HHHead = cur.getString(cur.getColumnIndex("HHHead"));
+                d._DthDate = cur.getString(cur.getColumnIndex("DthDate"));
+                d._MExType = cur.getString(cur.getColumnIndex("MExType"));
+                d._ExitType = cur.getString(cur.getColumnIndex("ExitType"));
                 d._Sex = cur.getString(cur.getColumnIndex("Sex"));
                 d._BDate_D = cur.getString(cur.getColumnIndex("BDate_D"));
                 d._BDate_M = cur.getString(cur.getColumnIndex("BDate_M"));

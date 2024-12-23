@@ -60,6 +60,7 @@ public class Member_list extends AppCompatActivity {
     private String DSSID;
     static String VillID = "";
     private String preganat;
+    private String DthDate;
     private String Name;
 
     private String GeoLevel7;
@@ -158,7 +159,7 @@ public class Member_list extends AppCompatActivity {
 
             btnSearch.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
-                    performSearch();
+                    DataSearch();
 
                 }});
 
@@ -179,6 +180,7 @@ public class Member_list extends AppCompatActivity {
             HHHead =IDbundle.getString("HHHead");
             DSSID =IDbundle.getString ("DSSID");
             preganat =IDbundle.getString ("Pstat");
+            DthDate =IDbundle.getString ("DthDate");
             BDate =IDbundle.getString ("BDate");
             Age =IDbundle.getString ("Age");
             Sex =IDbundle.getString ("Sex");
@@ -316,8 +318,7 @@ public class Member_list extends AppCompatActivity {
             recyclerView.setAdapter(mAdapter);
 
 
-           // DataSearch(txtSearch.getText().toString());
-           // DataSearch();
+
 
         }
         catch(Exception  e)
@@ -329,14 +330,9 @@ public class Member_list extends AppCompatActivity {
 
 
 
-    private void performSearch() {
+    private void DataSearch() {
         String searchText = txtSearch.getText().toString().trim();
 
-        // Validate search text
-        if (TextUtils.isEmpty(searchText)) {
-            Toast.makeText(this, "Please enter a search term.", Toast.LENGTH_SHORT).show();
-            return;
-        }
 
         // Validate spinner selection
         if (spnVillage.getSelectedItem() == null || spnVillage.getSelectedItem().toString().isEmpty()) {
@@ -355,11 +351,15 @@ public class Member_list extends AppCompatActivity {
         }
 
         // Construct SQL query
-        String query = "SELECT MemID, DSSID, VillID, Pstat, Name, HHHead, Age, Sex, LmpDt, BDate,  MoName, FaName, Active " +
+        String query = "SELECT MemID, DSSID, VillID, Pstat,DthDate, Name, HHHead, Age, Sex, LmpDt, BDate, MoName, FaName, Active " +
                 "FROM Member_Allinfo " +
                 "WHERE VillID = '" + selectedVillageId + "' " +
-                "AND HHHead LIKE '%" + searchText + "%' " +
                 "AND Active = '1'";
+
+        // Add HHHead condition only if searchText is not empty
+        if (!TextUtils.isEmpty(searchText)) {
+            query += " AND HHHead LIKE '%" + searchText + "%'";
+        }
 
         try {
             // Fetch filtered members from the database
@@ -381,6 +381,8 @@ public class Member_list extends AppCompatActivity {
 
 
 
+
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -395,12 +397,11 @@ public class Member_list extends AppCompatActivity {
         if (resultCode == Activity.RESULT_CANCELED) {
             //Write your code if there's no result
         } else {
-           // DataSearch( );
-         //   DataSearch(txtSearch.getText().toString());
+
         }
     }
 
-    private void DataSearch(String VillID, String HHHead)
+    /*private void DataSearch(String VillID, String HHHead)
     {
         try
         {
@@ -432,7 +433,7 @@ public class Member_list extends AppCompatActivity {
             Connection.MessageBox(Member_list.this, e.getMessage());
             return;
         }
-    }
+    }*/
 
 
 
@@ -443,7 +444,7 @@ public class Member_list extends AppCompatActivity {
 
         public class ViewHolder extends RecyclerView.ViewHolder {
               LinearLayout secMemberDetail;
-              TextView MemID, DSSID,preganat, Name, HHHead, Age,Sex, LmpDt, BDate, MoName, FaName;
+              TextView MemID, DSSID,preganat, Name, HHHead, Age,Sex, LmpDt, BDate, MoName, FaName, DthDate;
 
             public ViewHolder(@NonNull View itemView) {
                 super(itemView);
@@ -452,6 +453,7 @@ public class Member_list extends AppCompatActivity {
                 MemID=(TextView)itemView.findViewById(R.id.MemberID);
                 DSSID=(TextView)itemView.findViewById(R.id.DSSID);
                 preganat=(TextView)itemView.findViewById(R.id.preganat);
+                DthDate=(TextView)itemView.findViewById(R.id.DthDate);
                 Name =(TextView)itemView.findViewById(R.id.Name);
                 HHHead =(TextView)itemView.findViewById(R.id.HHHead);
                 Sex = (TextView)itemView.findViewById(R.id.MemberSex);
@@ -484,6 +486,7 @@ public class Member_list extends AppCompatActivity {
             holder.DSSID.setText("DSSID: " + member.getDSSID());
             holder.Name.setText(member.getName());
             holder.preganat.setText(member.getPstat() != null && !member.getPstat().equals("NULL") ? member.getPstat() : "");
+            holder.DthDate.setText(member.getDthDate() != null && !member.getDthDate().equals("NULL") ? member.getDthDate() : "");
             holder.HHHead.setText(member.getHHHead() != null && !member.getHHHead().equals("NULL") ? member.getHHHead() : "");
             holder.MoName.setText(member.getMoName() != null && !member.getMoName().equals("NULL") ? member.getMoName() : "");
             holder.FaName.setText(member.getFaName() != null && !member.getFaName().equals("NULL") ? member.getFaName() : "");

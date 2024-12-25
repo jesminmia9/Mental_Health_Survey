@@ -116,6 +116,7 @@ public class Member_list extends AppCompatActivity {
 
     ImageButton btnSearch;
     EditText txtSearch;
+    Spinner spnStatus;
 
 
     static String STARTTIME = "";
@@ -300,11 +301,42 @@ public class Member_list extends AppCompatActivity {
                 }
             });
 
+            Spinner spnStatus = findViewById(R.id.spnStatus);
+
+            // Define spinner options from strings.xml
+            ArrayAdapter<CharSequence> statusAdapter = ArrayAdapter.createFromResource(
+                    this,
+                    R.array.spinner_status_options,
+                    android.R.layout.simple_spinner_item
+            );
+
+            statusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+            // Set the adapter
+            spnStatus.setAdapter(statusAdapter);
+            spnStatus.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    String selectedStatus = spnStatus.getSelectedItem().toString();
+                    if (!TextUtils.isEmpty(selectedStatus)) {
+                        filterByStatus(selectedStatus);
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                    // Do nothing
+                }
+            });
 
 
 
 
-           // txtSearch = (EditText)findViewById(R.id.txtSearch);
+
+
+
+
+            // txtSearch = (EditText)findViewById(R.id.txtSearch);
 
             recyclerView = (RecyclerView)findViewById(R.id.recyclerViewMembers);
             mAdapter = new DataAdapter(dataList);
@@ -329,6 +361,31 @@ public class Member_list extends AppCompatActivity {
         }
     }
 
+    
+
+    private void filterByStatus(String status) {
+        String query = "SELECT MemID, DSSID, VillID, Pstat, DthDate, Name, HHHead, Age, Sex, LmpDt, BDate, MoName, FaName, Active " +
+                "FROM Member_Allinfo " +
+                "WHERE Active = '1'";
+
+        // Filter based on the selected status
+        if ("Pregnant".equals(status)) {
+            query += " AND Pstat = '41'";
+        } else if ("Death".equals(status)) {
+            query += " AND DthDate BETWEEN '2000-01-01' AND '2024-12-31'";
+        }
+
+        try {
+
+             Connection connection = new Connection(this);
+             List<Member_DataModel> filteredMembers = connection.fetchMembers(query);
+             mAdapter = new DataAdapter(filteredMembers);
+             recyclerView.setAdapter(mAdapter);
+
+        } catch (Exception e) {
+            Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
 
 
     private void DataSearch() {

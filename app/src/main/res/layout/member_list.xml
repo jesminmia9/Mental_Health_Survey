@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbar_height"
         android:background="@color/theme_color">
+
         <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="horizontal">
             <ImageButton android:id="@+id/cmdBack" android:background="@color/pageHeadingBack" android:src="@drawable/back" android:layout_width="50sp" android:layout_height="match_parent"/>
             <TextView android:id="@+id/lblHeading" android:text="Member Details" android:layout_toRightOf="@+id/cmdBack"  android:paddingLeft="10sp" android:layout_width="match_parent" android:layout_height="match_parent" android:gravity="center_vertical" android:textSize="20sp" android:textColor="@color/pageHeading"/>
@@ -52,13 +53,17 @@
 
 
 
+
     <View android:id="@+id/lineDCode" android:layout_height="1dip" android:layout_width="fill_parent" android:background="#CCCCCC" />
 
     </LinearLayout>
 
 
     <View android:layout_height="1dip" android:layout_width="fill_parent" android:layout_marginBottom="0sp" android:background="#CCCCCC" />
-    <RelativeLayout android:padding="10sp" android:layout_width="fill_parent" android:layout_height="wrap_content">
+    <RelativeLayout
+        android:padding="10sp"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
 
         <EditText
             android:id="@+id/txtSearch"
@@ -74,9 +79,48 @@
             android:padding="10dp"
             android:textSize="18sp" />
 
-        <ImageButton android:id="@+id/btnSearch" android:layout_alignParentEnd="true" android:textAllCaps="false" android:layout_marginLeft="20sp" android:textSize="18sp" android:textColor="@drawable/button_style_line_text_color" android:backgroundTint="@drawable/button_style_pressed"
-            android:src="@drawable/ic_action_search" app:tint="@color/white" android:background="@drawable/button_style_circle_line" android:layout_width="wrap_content" android:layout_height="40sp" android:layout_centerInParent="true" android:paddingLeft="5sp" android:paddingRight="5sp"/>
+        <ImageButton android:id="@+id/btnSearch"
+            android:layout_alignParentEnd="true"
+            android:textAllCaps="false"
+            android:layout_marginLeft="20sp"
+            android:textSize="18sp"
+            android:textColor="@drawable/button_style_line_text_color"
+            android:backgroundTint="@drawable/button_style_pressed"
+            android:src="@drawable/ic_action_search"
+            app:tint="@color/white"
+            android:background="@drawable/button_style_circle_line"
+            android:layout_width="wrap_content" android:layout_height="40sp"
+            android:layout_centerInParent="true" android:paddingLeft="5sp"
+            android:paddingRight="5sp"/>
+
+
     </RelativeLayout>
+    <LinearLayout
+        android:id="@+id/secStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/lblStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Status:"
+            android:textSize="18sp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="10dp" />
+
+        <Spinner
+            android:id="@+id/spnStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:spinnerMode="dropdown" />
+    </LinearLayout>
+
+
     <View android:layout_height="1dip" android:visibility="visible" android:layout_width="fill_parent" android:layout_marginBottom="0sp" android:background="#CCCCCC" />
        <include android:layout_width="match_parent" android:layout_height="wrap_content" layout="@layout/memberheading"/>
        <FrameLayout android:layout_width="match_parent" android:layout_weight="1" android:layout_height="0dp">

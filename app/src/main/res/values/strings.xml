@@ -57,5 +57,10 @@
     <string name="preganat">PREGNANT</string>
      <string name="hello_first_fragment">Hello first fragment</string>
      <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string-array name="spinner_status_options">
+        <item></item> <!-- Empty value -->
+        <item>Pregnant</item>
+        <item>Death</item>
+    </string-array>
 
  </resources>

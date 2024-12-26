@@ -55,7 +55,7 @@ import android.text.Editable;
 
 public class Member_list extends AppCompatActivity {
     boolean networkAvailable=false;
-     double currentLatitude,currentLongitude;
+    double currentLatitude,currentLongitude;
     private String MemID;
     private String DSSID;
     static String VillID = "";
@@ -280,18 +280,18 @@ public class Member_list extends AppCompatActivity {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     if (spnHousehold.getSelectedItem() != null && position != 0) {
-                    String selectedHousehold = spnHousehold.getSelectedItem().toString().split("-")[0];
+                        String selectedHousehold = spnHousehold.getSelectedItem().toString().split("-")[0];
 
 
 
-                    // Update the dataList dynamically based on selectedHousehold
-                    String query2 = "SELECT * FROM Member_Allinfo WHERE HHID='" + selectedHousehold + "'";
-                    List<Member_DataModel> updatedMember = C.fetchMembers(query2);
+                        // Update the dataList dynamically based on selectedHousehold
+                        String query2 = "SELECT * FROM Member_Allinfo WHERE HHID='" + selectedHousehold + "'";
+                        List<Member_DataModel> updatedMember = C.fetchMembers(query2);
 
-                    dataList.clear();
-                    dataList.addAll(updatedMember);
-                    mAdapter.notifyDataSetChanged();
-                }
+                        dataList.clear();
+                        dataList.addAll(updatedMember);
+                        mAdapter.notifyDataSetChanged();
+                    }
 
                 }
 
@@ -301,15 +301,17 @@ public class Member_list extends AppCompatActivity {
                 }
             });
 
-            Spinner spnStatus = findViewById(R.id.spnStatus);
+            //=========================================================================================
+            // Spinner for Status (Pregnant/Death);
+            //=========================================================================================
 
+            Spinner spnStatus = findViewById(R.id.spnStatus);
             // Define spinner options from strings.xml
             ArrayAdapter<CharSequence> statusAdapter = ArrayAdapter.createFromResource(
                     this,
                     R.array.spinner_status_options,
                     android.R.layout.simple_spinner_item
             );
-
             statusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
             // Set the adapter
@@ -322,15 +324,11 @@ public class Member_list extends AppCompatActivity {
                         filterByStatus(selectedStatus);
                     }
                 }
-
                 @Override
                 public void onNothingSelected(AdapterView<?> parent) {
                     // Do nothing
                 }
             });
-
-
-
 
 
 
@@ -361,8 +359,6 @@ public class Member_list extends AppCompatActivity {
         }
     }
 
-    
-
     private void filterByStatus(String status) {
         String query = "SELECT MemID, DSSID, VillID, Pstat, DthDate, Name, HHHead, Age, Sex, LmpDt, BDate, MoName, FaName, Active " +
                 "FROM Member_Allinfo " +
@@ -377,10 +373,10 @@ public class Member_list extends AppCompatActivity {
 
         try {
 
-             Connection connection = new Connection(this);
-             List<Member_DataModel> filteredMembers = connection.fetchMembers(query);
-             mAdapter = new DataAdapter(filteredMembers);
-             recyclerView.setAdapter(mAdapter);
+            Connection connection = new Connection(this);
+            List<Member_DataModel> filteredMembers = connection.fetchMembers(query);
+            mAdapter = new DataAdapter(filteredMembers);
+            recyclerView.setAdapter(mAdapter);
 
         } catch (Exception e) {
             Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -501,8 +497,8 @@ public class Member_list extends AppCompatActivity {
         private List<Member_DataModel> dataList;
 
         public class ViewHolder extends RecyclerView.ViewHolder {
-              LinearLayout secMemberDetail;
-              TextView MemID, DSSID,preganat, Name, HHHead, Age,Sex, LmpDt, BDate, MoName, FaName, DthDate, DthStatus;
+            LinearLayout secMemberDetail;
+            TextView MemID, DSSID,preganat, Name, HHHead, Age,Sex, LmpDt, BDate, MoName, FaName, DthDate,  DthStatus;
 
             public ViewHolder(@NonNull View itemView) {
                 super(itemView);
@@ -542,28 +538,44 @@ public class Member_list extends AppCompatActivity {
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             Member_DataModel member = dataList.get(position);
+            holder.DSSID.setText("DSSID: " + member.getDSSID());
+            holder.Name.setText(member.getName());
+            holder.preganat.setText(member.getPstat() != null && !member.getPstat().equals("NULL") ? member.getPstat() : "");
+            holder.DthDate.setText(member.getDthDate() != null && !member.getDthDate().equals("NULL") ? member.getDthDate() : "");
+            holder.HHHead.setText(member.getHHHead() != null && !member.getHHHead().equals("NULL") ? member.getHHHead() : "");
+            holder.MoName.setText(member.getMoName() != null && !member.getMoName().equals("NULL") ? member.getMoName() : "");
+            holder.FaName.setText(member.getFaName() != null && !member.getFaName().equals("NULL") ? member.getFaName() : "");
 
-            // Handle Pregnant Logic
-            String pstateValue = member.getPstat(); // Fetch pstate column value
-            if ("41".equals(pstateValue)) {
-                holder.preganat.setText("Pregnant");
+            // Handle Preganat and LmpDt display logic
+            String preganatValue = member.getPstat(); // Assuming Pstat holds the pregnant status
+            if ("41".equals(preganatValue)) {
+                holder.preganat.setText("Pregnant"); // Display 'Pregnant' instead of 41
                 holder.preganat.setVisibility(View.VISIBLE);
 
-                String lmprawDate = member.getLmpDt(); // Fetch LMP date
+                // Display LmpDt with proper formatting if needed
+                String lmprawDate = member.getLmpDt();
                 if (lmprawDate != null && !lmprawDate.isEmpty()) {
                     try {
                         SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
                         SimpleDateFormat outputFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
                         String formattedDate = outputFormat.format(inputFormat.parse(lmprawDate));
-                        holder.LmpDt.setText("LMP Date: " + formattedDate);
+
+                        // Combine "LMP" and formattedDate with bold styling for "LMP"
+                        String displayText = " LMP   :           " + formattedDate;
+                        SpannableString spannable = new SpannableString(displayText);
+                        spannable.setSpan(new StyleSpan(Typeface.BOLD), 0, 13, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+
+                        holder.LmpDt.setText(spannable);
                     } catch (ParseException e) {
-                        holder.LmpDt.setText("LMP Date: " + lmprawDate); // Fallback to raw date
+                        holder.LmpDt.setText(lmprawDate); // Fallback to raw date if parsing fails
                     }
                 } else {
-                    holder.LmpDt.setText("");
+                    holder.LmpDt.setText(""); // Set empty if no date is provided
                 }
                 holder.LmpDt.setVisibility(View.VISIBLE);
             } else {
+                // Hide both preganat and LmpDt if the condition is not met
                 holder.preganat.setVisibility(View.GONE);
                 holder.LmpDt.setVisibility(View.GONE);
             }
@@ -594,14 +606,21 @@ public class Member_list extends AppCompatActivity {
                 holder.DthDate.setVisibility(View.GONE);
             }
 
-            // Other member details...
-            holder.DSSID.setText("DSSID: " + member.getDSSID());
-            holder.Name.setText(member.getName());
-            holder.HHHead.setText(member.getHHHead());
-            holder.MoName.setText(member.getMoName());
-            holder.FaName.setText(member.getFaName());
 
-            // Format Birth Date
+
+
+
+            // Convert Sex value
+            String sexValue = member.getSex();
+            if ("1".equals(sexValue)) {
+                holder.Sex.setText("Male");
+            } else if ("2".equals(sexValue)) {
+                holder.Sex.setText("Female");
+            } else {
+                holder.Sex.setText(""); // Set empty if no valid value
+            }
+
+            // Convert date format from yyyy-mm-dd to dd/mm/yyyy
             String rawDate = member.getBDate();
             if (rawDate != null && !rawDate.isEmpty()) {
                 try {
@@ -610,23 +629,14 @@ public class Member_list extends AppCompatActivity {
                     String formattedDate = outputFormat.format(inputFormat.parse(rawDate));
                     holder.BDate.setText(formattedDate);
                 } catch (ParseException e) {
-                    holder.BDate.setText(rawDate); // Fallback to raw date
+                    holder.BDate.setText(rawDate); // Fallback to raw date if parsing fails
                 }
             } else {
-                holder.BDate.setText("");
+                holder.BDate.setText(""); // Set empty if no date is provided
             }
 
-            // Format and display Sex
-            String sexValue = member.getSex();
-            if ("1".equals(sexValue)) {
-                holder.Sex.setText("Male");
-            } else if ("2".equals(sexValue)) {
-                holder.Sex.setText("Female");
-            } else {
-                holder.Sex.setText("");
-            }
+
         }
-
 
         public int getItemCount() {
             return dataList.size();

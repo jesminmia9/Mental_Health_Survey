@@ -1830,6 +1830,7 @@ public class Connection extends SQLiteOpenHelper {
             if (cursor.moveToFirst()) {
                 do {
                     Member_DataModel member = new Member_DataModel();
+
                     member.setMemID(cursor.getString(cursor.getColumnIndexOrThrow("MemID")));
                     member.setDSSID(cursor.getString(cursor.getColumnIndexOrThrow("DSSID")));
                     member.setVillID(cursor.getString(cursor.getColumnIndexOrThrow("VillID")));
@@ -1843,7 +1844,9 @@ public class Connection extends SQLiteOpenHelper {
                     member.setBDate(cursor.getString(cursor.getColumnIndexOrThrow("BDate")));
                     member.setMoName(cursor.getString(cursor.getColumnIndexOrThrow("MoName")));
                     member.setFaName(cursor.getString(cursor.getColumnIndexOrThrow("FaName")));
+                    //   member.setGeoLevel7(cursor.getString(cursor.getColumnIndexOrThrow("GeoLevel7")));
                     member.setActive(cursor.getString(cursor.getColumnIndexOrThrow("Active")));
+
 
                     members.add(member);
                 } while (cursor.moveToNext());

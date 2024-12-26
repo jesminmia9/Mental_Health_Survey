@@ -13,6 +13,14 @@ import android.widget.Toast;
 
 public class Member_DataModel{
 
+    private String _GeoLevel7 = "";
+    public String getGeoLevel7(){
+        return _GeoLevel7;
+    }
+    public void setGeoLevel7(String newValue){
+        _GeoLevel7 = newValue;
+    }
+
         private String _MemID = "";
         public String getMemID(){
               return _MemID;
@@ -20,6 +28,8 @@ public class Member_DataModel{
         public void setMemID(String newValue){
               _MemID = newValue;
          }
+
+
         private String _HHID = "";
         public String getHHID(){
               return _HHID;
@@ -555,10 +565,11 @@ public class Member_DataModel{
             try
               {
                  ContentValues contentValues = new ContentValues();
+                 contentValues.put("GeoLevel7", _GeoLevel7);
                  contentValues.put("MemID", _MemID);
                  contentValues.put("HHID", _HHID);
                  contentValues.put("DSSID", _DSSID);
-                  contentValues.put("VillID", _VillID);
+                 contentValues.put("VillID", _VillID);
                  contentValues.put("MSlNo", _MSlNo);
                  contentValues.put("Rth", _Rth);
                  contentValues.put("RthOth", _RthOth);
@@ -645,6 +656,7 @@ public class Member_DataModel{
               {
                  ContentValues contentValues = new ContentValues();
                  contentValues.put("MemID", _MemID);
+                  contentValues.put("GeoLevel7", _GeoLevel7);
                  contentValues.put("HHID", _HHID);
                  contentValues.put("VillID", _VillID);
                  contentValues.put("MSlNo", _MSlNo);
@@ -739,6 +751,7 @@ public class Member_DataModel{
                 d = new Member_DataModel();
                 d._Count = Count;
                 d._MemID = cur.getString(cur.getColumnIndex("MemID"));
+                d._GeoLevel7= cur.getString(cur.getColumnIndex("GeoLevel7"));
                 d._HHID = cur.getString(cur.getColumnIndex("HHID"));
                 d._DSSID = cur.getString(cur.getColumnIndex("DSSID"));
                 d._VillID = cur.getString(cur.getColumnIndex("VillID"));

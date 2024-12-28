@@ -15,6 +15,7 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.StyleSpan;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -364,7 +365,6 @@ public class Member_list extends AppCompatActivity {
                 "FROM Member_Allinfo " +
                 "WHERE Active = '1'";
 
-        // Filter based on the selected status
         if ("Pregnant".equals(status)) {
             query += " AND Pstat = '41'";
         } else if ("Death".equals(status)) {
@@ -372,16 +372,20 @@ public class Member_list extends AppCompatActivity {
         }
 
         try {
-
             Connection connection = new Connection(this);
             List<Member_DataModel> filteredMembers = connection.fetchMembers(query);
-            mAdapter = new DataAdapter(filteredMembers);
-            recyclerView.setAdapter(mAdapter);
 
+            if (filteredMembers.isEmpty()) {
+                Toast.makeText(this, "No results found for the selected status.", Toast.LENGTH_SHORT).show();
+            } else {
+                mAdapter = new DataAdapter(filteredMembers);
+                recyclerView.setAdapter(mAdapter);
+            }
         } catch (Exception e) {
             Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
+
 
 
     private void DataSearch() {
@@ -431,6 +435,7 @@ public class Member_list extends AppCompatActivity {
             Toast.makeText(this, "Error fetching data: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
+
 
 
 
